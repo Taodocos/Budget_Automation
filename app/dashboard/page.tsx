@@ -12,6 +12,7 @@ import CapitalItem from "./Capital&Supplies/CapitalItem/page";
 import UnitPrice from "./UnitPrice/page";
 import SuplyItem from "./Capital&Supplies/SuplyItem/page";
 import ManPower from "./ManPowerReq/page";
+import HrGrid from "./HumanResource/page";
 
 const Dashboard = () => {
   type TabKey =
@@ -21,7 +22,9 @@ const Dashboard = () => {
     | "Report"
     | "View"
     | "RegisterItem"
-    |"ManPower";
+    |"ManPower"
+    |"HumanResource";
+
 
   const tabs: Record<TabKey, string[]> = {
     "Operational Formats": ["Resource Mobilization", "Resource Allocation"],
@@ -31,6 +34,7 @@ const Dashboard = () => {
     View: [],
     RegisterItem:[],
     ManPower:[],
+    HumanResource:[],
   };
 
   const [activeTab, setActiveTab] = useState<TabKey | "">("");
@@ -86,6 +90,8 @@ const Dashboard = () => {
         return <UnitPrice />;
         case "ManPower":
           return <ManPower />;
+          case "HumanResource":
+            return <HrGrid />;
       default:
         return <div className="text-[#025AA2] font-bold">WELCOME</div>;
     }

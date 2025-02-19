@@ -1,71 +1,101 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import useFetchData from "@/app/service/useFetchData"; 
-import { fetchDataBackend, ReportFormData } from "@/app/service/apiFetchEditData"; 
-import { saveData } from "@/app/service/apiUpdateOpData"; 
+import { fetchDataBackend } from "@/app/service/apiFetchHumanR"; 
+import { saveData } from "@/app/service/apiUpdateRepo"; 
+import { fetchBranches } from "@/app/service/apiFetchBranch"; 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
 
-const EditableGrid = () => {
+const AllowGrid = () => {
     const [branchCode, setBranchCode] = useState<string | null>(null);
     const [districtRight, setDistrictRight] = useState<string | null>(null);
-    const [user_Id, setuserId] = useState<string | null>(null);
-    const { data, loading, error } = useFetchData(branchCode); 
-    const [editParentCode, setEditParentCode] = useState<string | null>(null);
-    const [gridData, setGridData] = useState<ReportFormData[]>([]);
+    const [userId, setUserId] = useState<string | null>(null);
+    const [branches, setBranches] = useState<{ branch_code: string; branch_name: string }[]>([]);
+    const [editParentCode, setEditParentCode] = useState<number | null>(null);
+    const [gridData, setGridData] = useState<any[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(0);
     const rowsPerPage = 7; 
-    const [isApproved, setIsApproved] = useState<boolean>(false);
-    const [isRejected, setIsRejected] = useState<boolean>(false);
 
     useEffect(() => {
         const storedBranchCode = sessionStorage.getItem("branch_code");
         const storedDistrictRight = sessionStorage.getItem("district_code");
-        const storedUserid = sessionStorage.getItem("userId");
+        const storedUserId = sessionStorage.getItem("userId");
         setBranchCode(storedBranchCode);
         setDistrictRight(storedDistrictRight);
-        setuserId(storedUserid); 
+        setUserId(storedUserId); 
     }, []);
 
     useEffect(() => {
-        if (branchCode && districtRight) {
-            // Determine the status based on checkbox states
-            let status: string | undefined; // Use undefined instead of an empty string
-            if (isApproved) {
-                status = "2"; // Approved
-            } else if (isRejected) {
-                status = "3"; // Rejected
+        const fetchBranchData = async () => {
+            if (districtRight) {
+                const branchData = await fetchBranches(branchCode || "", districtRight);
+                setBranches(branchData);
             }
+        };
+        fetchBranchData();
+    }, [districtRight, branchCode]);
 
-            // Fetch data based on the determined status
-            fetchDataBackend(branchCode, districtRight, status) // Ensure status is passed correctly
+    useEffect(() => {
+        if (branchCode) {
+            fetchDataBackend(branchCode)
                 .then(data => {
-                    setGridData(data);
+                    console.log("Fetched Data:", data); // Log fetched data
+                    if (data && data.length > 0) {
+                        setGridData(data); // Set the grid data if it exists
+                    } else {
+                        console.log("No data returned for the given branch code.");
+                        setGridData([]); // Clear the grid data if no valid data is returned
+                    }
                 })
                 .catch(err => {
                     console.error("Error fetching grid data:", err);
                 });
         }
-    }, [branchCode, districtRight, isApproved, isRejected]);
+    }, [branchCode]);
 
-    const handleInputChange = (parentCode: string, field: keyof ReportFormData, value: string) => {
+    const handleBranchChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedBranchCode = event.target.value;
+        setBranchCode(selectedBranchCode);
+        setCurrentPage(0); // Reset to the first page when changing the branch
+
+        if (selectedBranchCode) {
+            fetchDataBackend(selectedBranchCode)
+                .then(data => {
+                    console.log("Fetched Data after branch change:", data);
+                    if (data && data.length > 0) {
+                        setGridData(data);
+                    } else {
+                        console.log("No data returned for the selected branch.");
+                        setGridData([]); // Clear if no data
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching grid data:", err);
+                });
+        } else {
+            setGridData([]); // Clear grid data if no branch is selected
+        }
+    };
+
+    const handleInputChange = (index: number, field: string, value: string) => {
         setGridData((prevData) =>
-            prevData.map((row) =>
-                row.parentcode === parentCode ? { ...row, [field]: value } : row
+            prevData.map((row, i) =>
+                i === index ? { ...row, [field]: value } : row
             )
         );
     };
 
-    const handleEdit = (parentCode: string) => {
-        setEditParentCode(parentCode);
+    const handleEdit = (index: number) => {
+        setEditParentCode(index);
     };
 
-    const handleSave = async (parentCode: string) => {
-        const rowToSave = gridData.find(row => row.parentcode === parentCode);
+    const handleSave = async (index: number) => {
+        const rowToSave = gridData[index];
         if (rowToSave) {
             try {
                 await saveData(rowToSave); 
+                alert("Changes saved successfully!"); 
             } catch (error) {
                 console.error('Error saving changes:', error);
             }
@@ -74,9 +104,7 @@ const EditableGrid = () => {
     };
 
     const filteredData = gridData.filter(row =>
-        row.description.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        row.estimated.includes(searchQuery) ||
-        row.actual.includes(searchQuery)
+        row.allowanceDesc.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -94,51 +122,34 @@ const EditableGrid = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
-
     return (
         <div className="p-6 bg-gray-100 overflow-hidden">
+            <select
+                value={branchCode || ""}
+                onChange={handleBranchChange}
+                className="mb-4 p-2 border rounded text-black"
+            >
+                <option value="">Select a branch</option>
+                {branches.map((branch) => (
+                    <option key={branch.branch_code} value={branch.branch_code}>
+                        {branch.branch_name}
+                    </option>
+                ))}
+            </select>
+
             <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="mb-4 p-2 border rounded text-black font-bold bg-black-200 text-black"
+                className="mb-4 p-2 border rounded text-black font-bold"
             />
-            <div className="mb-4">
-                <label className="mr-4 font-bold bg-black-200 text-black">
-                    <input 
-                        type="checkbox" 
-                        checked={isApproved} 
-                        onChange={() => {
-                            setIsApproved(!isApproved);
-                            if (isRejected) setIsRejected(false); // Ensure only one is checked
-                        }} 
-                    />
-                    Approved
-                </label>
-                <label className="mr-4 font-bold bg-black-200 text-black">
-                    <input 
-                        type="checkbox" 
-                        checked={isRejected} 
-                        onChange={() => {
-                            setIsRejected(!isRejected);
-                            if (isApproved) setIsApproved(false); // Ensure only one is checked
-                        }} 
-                    />
-                    Rejected
-                </label>
-            </div>
+           
             <div className="bg-white shadow-md rounded p-4">
                 <table className="w-full table-auto border-collapse border border-gray-300">
                     <thead>
                         <tr className="bg-[#025AA2] text-left text-sm font-semibold text-[#fedc61]">
-                            <th className="border p-2">Description</th>
-                            <th className="border p-2">Estimated</th>
-                            <th className="border p-2">Actual</th>
-                            <th className="border p-2">Net Increment</th>
-                            <th className="border p-2">Projected</th>
+                            <th className="border p-2">Allowance Desc</th>
                             <th className="border p-2">Jul</th>
                             <th className="border p-2">Aug</th>
                             <th className="border p-2">Sep</th>
@@ -155,63 +166,15 @@ const EditableGrid = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentRows.map((row) => (
-                            <tr key={row.parentcode} className="text-sm text-gray-700">
-                                <td className="border p-2">{row.description}</td>
+                        {currentRows.map((row, index) => (
+                            <tr key={`${row.allowanceDesc}-${index}`} className="text-sm text-gray-700">
+                                <td className="border p-2">{row.allowanceDesc}</td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
-                                            value={row.estimated}
-                                            onChange={(e) => handleInputChange(row.parentcode, "estimated", e.target.value)}
-                                            className="w-full p-1 border rounded"
-                                        />
-                                    ) : (
-                                        row.estimated
-                                    )}
-                                </td>
-                                <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
-                                        <input
-                                            type="text"
-                                            value={row.actual}
-                                            onChange={(e) => handleInputChange(row.parentcode, "actual", e.target.value)}
-                                            className="w-full p-1 border rounded"
-                                        />
-                                    ) : (
-                                        row.actual
-                                    )}
-                                </td>
-                                <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
-                                        <input
-                                            type="text"
-                                            value={row.netincrement}
-                                            onChange={(e) => handleInputChange(row.parentcode, "netincrement", e.target.value)}
-                                            className="w-full p-1 border rounded"
-                                        />
-                                    ) : (
-                                        row.netincrement
-                                    )}
-                                </td>
-                                <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
-                                        <input
-                                            type="text"
-                                            value={row.projected}
-                                            onChange={(e) => handleInputChange(row.parentcode, "projected", e.target.value)}
-                                            className="w-full p-1 border rounded"
-                                        />
-                                    ) : (
-                                        row.projected
-                                    )}
-                                </td>
-                                <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
-                                        <input
-                                            type="text"
-                                            value={row.jul} 
-                                            onChange={(e) => handleInputChange(row.parentcode, "jul", e.target.value)}
+                                            value={row.jul}
+                                            onChange={(e) => handleInputChange(index, "jul", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -219,11 +182,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.aug}
-                                            onChange={(e) => handleInputChange(row.parentcode, "aug", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "aug", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -231,11 +194,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.sep}
-                                            onChange={(e) => handleInputChange(row.parentcode, "sep", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "sep", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -243,11 +206,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.oct}
-                                            onChange={(e) => handleInputChange(row.parentcode, "oct", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "oct", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -255,11 +218,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.nov}
-                                            onChange={(e) => handleInputChange(row.parentcode, "nov", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "nov", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -267,11 +230,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.dec}
-                                            onChange={(e) => handleInputChange(row.parentcode, "dec", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "dec", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -279,11 +242,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.jan}
-                                            onChange={(e) => handleInputChange(row.parentcode, "jan", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "jan", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -291,11 +254,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.feb}
-                                            onChange={(e) => handleInputChange(row.parentcode, "feb", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "feb", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -303,11 +266,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.mar}
-                                            onChange={(e) => handleInputChange(row.parentcode, "mar", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "mar", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -315,11 +278,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.apr}
-                                            onChange={(e) => handleInputChange(row.parentcode, "apr", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "apr", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -327,11 +290,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.may}
-                                            onChange={(e) => handleInputChange(row.parentcode, "may", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "may", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -339,11 +302,11 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <input
                                             type="text"
                                             value={row.jun}
-                                            onChange={(e) => handleInputChange(row.parentcode, "jun", e.target.value)}
+                                            onChange={(e) => handleInputChange(index, "jun", e.target.value)}
                                             className="w-full p-1 border rounded"
                                         />
                                     ) : (
@@ -351,16 +314,16 @@ const EditableGrid = () => {
                                     )}
                                 </td>
                                 <td className="border p-2">
-                                    {editParentCode === row.parentcode ? (
+                                    {editParentCode === index ? (
                                         <button
-                                            onClick={() => handleSave(row.parentcode)}
+                                            onClick={() => handleSave(index)}
                                             className="bg-green-500 text-white p-1 rounded"
                                         >
                                             Save
                                         </button>
                                     ) : (
                                         <button
-                                            onClick={() => handleEdit(row.parentcode)}
+                                            onClick={() => handleEdit(index)}
                                             className="bg-blue-500 text-white p-1 rounded mr-2"
                                         >
                                             Edit
@@ -394,4 +357,4 @@ const EditableGrid = () => {
     );
 };
 
-export default EditableGrid;
+export default AllowGrid;

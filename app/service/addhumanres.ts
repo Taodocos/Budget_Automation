@@ -4,7 +4,28 @@ import apiServices from "../ExportApi";
 export type FormSubmissionData = {
     existingStaff: string;
     additionalStaff: string;
-    parent_code: string;
+     // Ensure compatibility
+    jul: string;  
+    aug: string;
+    sep: string;
+    oct: string;
+    nov: string;
+    dec: string;
+    jan: string;
+    feb: string;
+    mar: string;
+    apr: string;
+    may: string;
+    jun: string;
+    New: string; // Changed to lowercase 'new' to match your usage
+    replacement: string;
+};
+
+export type DataRow = {
+    id: string;
+    JobPosId: string;
+    existingStaff: string;
+    additionalStaff: string;
     branch_code: string; // Ensure compatibility
     jul: string;  
     aug: string;
@@ -18,61 +39,40 @@ export type FormSubmissionData = {
     apr: string;
     may: string;
     jun: string;
-    new: number;
-    replacement: number;
-};
-
-export type DataRow = {
-    id: string;
-    title: string;
-    existingStaff: string;
-    additionalStaff: string;
-    jul: string;  
-    aug: string;
-    sep: string;
-    oct: string;
-    nov: string;
-    dec: string;
-    jan: string;
-    feb: string;
-    mar: string;
-    apr: string;
-    may: string;
-    jun: string;
-    new: number;
-    replacement: number;
+    New: string; 
+    replacement: string;
 };
 
 // Update trimData to handle only string fields
 const trimData = (data: FormSubmissionData): FormSubmissionData => {
     return {
         ...data,
-        existingStaff: typeof data.existingStaff === 'string' ? data.existingStaff.trim() : data.existingStaff,
-        additionalStaff: typeof data.additionalStaff === 'string' ? data.additionalStaff.trim() : data.additionalStaff,
-        parent_code: typeof data.parent_code === 'string' ? data.parent_code.trim() : data.parent_code,
-        branch_code: typeof data.branch_code === 'string' ? data.branch_code.trim() : data.branch_code,
-        jul: typeof data.jul === 'string' ? data.jul.trim() : data.jul,
-        aug: typeof data.aug === 'string' ? data.aug.trim() : data.aug,
-        sep: typeof data.sep === 'string' ? data.sep.trim() : data.sep,
-        oct: typeof data.oct === 'string' ? data.oct.trim() : data.oct,
-        nov: typeof data.nov === 'string' ? data.nov.trim() : data.nov,
-        dec: typeof data.dec === 'string' ? data.dec.trim() : data.dec,
-        jan: typeof data.jan === 'string' ? data.jan.trim() : data.jan,
-        feb: typeof data.feb === 'string' ? data.feb.trim() : data.feb,
-        mar: typeof data.mar === 'string' ? data.mar.trim() : data.mar,
-        apr: typeof data.apr === 'string' ? data.apr.trim() : data.apr,
-        may: typeof data.may === 'string' ? data.may.trim() : data.may,
-        jun: typeof data.jun === 'string' ? data.jun.trim() : data.jun,
-        new: data.new, 
+        existingStaff: data.existingStaff, // No trimming needed for numbers
+        additionalStaff: data.additionalStaff, // No trimming needed for numbers
+         // Trim string
+        jul: data.jul,
+        aug: data.aug,
+        sep: data.sep,
+        oct: data.oct,
+        nov: data.nov,
+        dec: data.dec,
+        jan: data.jan,
+        feb: data.feb,
+        mar: data.mar,
+        apr: data.apr,
+        may: data.may,
+        jun: data.jun,
+        New: data.New, 
         replacement: data.replacement 
     };
 };
+
 export const sendDataBackend = async (data: FormSubmissionData[]): Promise<DataRow[]> => {
     try {
         const trimmedData = data.map(trimData);
         console.log("Transformed Data to be sent:", trimmedData);
         
-        const response = await apiServices.post("/addformdata", trimmedData);
+        const response = await apiServices.post("/addManPower", trimmedData);
         console.log("Response data:", response.data);
         window.alert(`Data submitted successfully`);
         

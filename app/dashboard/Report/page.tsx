@@ -69,7 +69,7 @@ const EditableGrid = () => {
         section11: '17', section12: '83', section13: '84', section14: '85', section15: '86', section16: '87', section17: '88',  section18: '773', 
         section19: '772',  section20: '434', section21: '435', section22: '436',  section23: '437', section24: '438',  section25: '439',  
         section26: '440', section27: '441', section28: '442', 
-        section29: '443', section30: '444', section31: '445', section32: '446', section33: '10', section34: '8', section35: '9',  section36: '10', 
+        section29: '443', section30: '444', section31: '445', section32: '446', section33: '', section34: '8', section35: '9',  section36: '10', 
     };
 
     const toggleSection = async (sectionKey: SectionKey) => {
@@ -3279,6 +3279,162 @@ console.log("reason to be send", reason);
         );
     };
     
+    const renderGridForSection33 = () => {
+        return (
+            <table className="w-full table-auto border-collapse border border-gray-300">
+                <thead>
+                    <tr className="bg-[#025AA2] text-left text-sm font-semibold text-[#fedc61]">
+                    <th className="border p-2">Allowance</th>
+                    <th className="border p-2">Jul</th>
+                    <th className="border p-2">Aug</th>
+                    <th className="border p-2">Sep</th>
+                    <th className="border p-2">Oct</th>
+                    <th className="border p-2">Nov</th>
+                    <th className="border p-2">Dec</th>
+                    <th className="border p-2">Jan</th>
+                    <th className="border p-2">Feb</th>
+                    <th className="border p-2">Mar</th>
+                    <th className="border p-2">Apr</th>
+                    <th className="border p-2">May</th>
+                    <th className="border p-2">Jun</th>
+                    <th className="border p-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {gridData.map((row) => (
+                    <tr key={row.id} className="text-sm text-gray-700">
+                        {editRowId === row.id ? (
+                            <>
+                                 <td className="border p-2">{row.allowanceDesc}</td>
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.jul}
+                                        onChange={(e) => handleChange('jul', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.aug}
+                                        onChange={(e) => handleChange('aug', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.aug}
+                                        onChange={(e) => handleChange('sep', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.aug}
+                                        onChange={(e) => handleChange('oct', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.aug}
+                                        onChange={(e) => handleChange('nov', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.aug}
+                                        onChange={(e) => handleChange('dec', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.feb}
+                                        onChange={(e) => handleChange('feb', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.mar}
+                                        onChange={(e) => handleChange('mar', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.apr}
+                                        onChange={(e) => handleChange('apr', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.may}
+                                        onChange={(e) => handleChange('may', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+                                <td className="border p-2">
+                                    <input
+                                        type="number"
+                                        value={editValues.jun}
+                                        onChange={(e) => handleChange('jun', e.target.value)}
+                                        className="border rounded p-1"
+                                    />
+                                </td>
+                            
+                            
+                                <td className="border p-2">
+                                    <button onClick={() => handleSave(row)} className="bg-green-500 text-white p-1 rounded">Save</button>
+                                    <button onClick={handleCancel} className="bg-red-500 text-white p-1 rounded ml-2">Cancel</button>
+                                </td>
+                            </>
+                        ) : (
+                            <>
+                                <td className="border p-2">{row.allowanceDesc}</td>
+                                <td className="border p-2">{row.jul}</td>
+                                <td className="border p-2">{row.aug}</td>
+                                <td className="border p-2">{row.sep}</td>
+                                <td className="border p-2">{row.oct}</td>
+                                <td className="border p-2">{row.nov}</td>
+                                <td className="border p-2">{row.dec}</td>
+                                <td className="border p-2">{row.jan}</td>
+                                <td className="border p-2">{row.feb}</td>
+                                <td className="border p-2">{row.mar}</td>
+                                <td className="border p-2">{row.apr}</td>
+                                <td className="border p-2">{row.may}</td>
+                                <td className="border p-2">{row.jun}</td>
+                                <td className="border p-2">
+                                    <button onClick={() => handleEdit(row)} className="bg-blue-500 text-white p-1 rounded">Edit</button>
+                                </td>
+                            </>
+                        )}
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        );
+    };
+    
+
  
     return (
       <div className="p-6 bg-gray-100 overflow-hidden">
@@ -3770,6 +3926,21 @@ console.log("reason to be send", reason);
                   {expandedSections['section32'] && (
                       <div className="mt-2">
                           {renderGridForSection32()}
+                          <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div>
+                      </div>
+                  )}
+              </div>
+
+              <div className="mb-4">
+                  <button onClick={() => toggleSection('section33')} className="flex items-center">
+                      {expandedSections['section33'] ? "OtherSupplies" : "OtherSupplies"}
+                  </button>
+                  {expandedSections['section33'] && (
+                      <div className="mt-2">
+                          {renderGridForSection33()}
                           <div className="flex justify-end mt-4">
                                 <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
                                 <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>

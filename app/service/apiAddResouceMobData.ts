@@ -58,7 +58,7 @@ export const sendDataBackend = async (data: FormData[]): Promise<DataRow[]> => {
     const trimmedData = data.map(trimData);
     console.log("Transformed Data to be sent:", trimmedData);
     
-    const response = await apiServices.post("/addformdata", trimmedData);
+    const response = await apiServices.post("http://172.16.239.108:5289/Bplan_api/app/sumbit", trimmedData);
     console.log("Response data:", response.data);
     window.alert(`Data submitted successfully`);
     

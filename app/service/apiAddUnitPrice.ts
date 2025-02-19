@@ -2,14 +2,14 @@ import axios from "axios";
 import apiServices from "../ExportApi";
 
 export type FormData = {
-  item: string;      // Ensure this matches
-  unitPrice: string; // Ensure this matches
+  item: string;      
+  unitPrice: string; 
 };
 
 export type DataRow = {
-    id: string;
-    item: string;
-    unitPrice: string;
+  id: string;
+  item: string;
+  unitPrice: string;
 };
 
 const trimData = (data: FormData): FormData => {
@@ -19,12 +19,12 @@ const trimData = (data: FormData): FormData => {
   return trimmedData;
 };
 
-export const sendDataBackend = async (data: FormData[]): Promise<DataRow[]> => {
+export const sendDataBackend = async (data: FormData): Promise<DataRow[]> => {
   try {
-    const trimmedData = data.map(trimData);
+    const trimmedData = trimData(data); // Trim the single data object
     console.log("Transformed Data to be sent:", trimmedData);
     
-    const response = await apiServices.post("/addformdata", trimmedData);
+    const response = await apiServices.post("/registerItem", trimmedData);
     console.log("Response data:", response.data);
     window.alert(`Data submitted successfully`);
     

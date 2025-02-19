@@ -13,13 +13,14 @@ interface SourceItem {
 
 interface DataRow {
   id: string;
-  item: string;
+  item: string; // This will hold the selected item code from the dropdown
   quantity: string;
   unitPrice: string;
   totalBudget: string;
   quarter: string;
-  new: string;
+  New: string;
   replacement: string;
+  
 }
 
 const SuplyItem = () => {
@@ -31,7 +32,7 @@ const SuplyItem = () => {
   const [OtherSupplies, setOtherSupplies] = useState<DataRow[]>([]);
   
   const [StationarySources, setStationarySources] = useState<SourceItem[]>([]);
-  const [BankFormatSources, setBankFormatSources]= useState<SourceItem[]>([]);
+  const [BankFormatSources, setBankFormatSources] = useState<SourceItem[]>([]);
   const [UniformSources, setUniformSources] = useState<SourceItem[]>([]);
   const [OtherSuppliesSources, setOtherSuppliesSources] = useState<SourceItem[]>([]);
   
@@ -61,19 +62,18 @@ const SuplyItem = () => {
   };
 
   const fetchAllSources = async () => {
-    if (expandedGrids.has("OfficeFurniture")) {
-      setStationary(await fetchSources("86"));
+    if (expandedGrids.has("Stationary")) {
+      setStationarySources(await fetchSources("443"));
     }
-    if (expandedGrids.has("OfficeEquipment")) {
-      setBankFormat(await fetchSources("87"));
+    if (expandedGrids.has("BankFormat")) {
+      setBankFormatSources(await fetchSources("444"));
     }
-    if (expandedGrids.has("ITHardware")) {
-      setUniform(await fetchSources("88"));
+    if (expandedGrids.has("Uniform")) {
+      setUniformSources(await fetchSources("445"));
     }
-    if (expandedGrids.has("OtherITItems")) {
-      setOtherSupplies(await fetchSources("773"));
+    if (expandedGrids.has("OtherSupplies")) {
+      setOtherSuppliesSources(await fetchSources("446"));
     }
-   
   };
 
   useEffect(() => {
@@ -92,6 +92,12 @@ const SuplyItem = () => {
     field: keyof DataRow,
     value: string
   ) => {
+    // Validate numeric fields
+    if ((field === "quantity" || field === "unitPrice") && isNaN(Number(value))) {
+      alert("Please enter a valid number.");
+      return;
+    }
+
     const updatedData = (type === "Stationary" ? Stationary :
       type === "BankFormat" ? BankFormat :
       type === "Uniform" ? Uniform :
@@ -104,18 +110,19 @@ const SuplyItem = () => {
       case "BankFormat": setBankFormat(updatedData); break;
       case "Uniform": setUniform(updatedData); break;
       case "OtherSupplies": setOtherSupplies(updatedData); break;
-
     }
   };
 
   const formatData = (dataset: DataRow[]): FormData[] => {
     return dataset.map(row => ({
+      item:row.item,
       quantity: row.quantity,
       unitPrice: row.unitPrice,
       totalBudget: row.totalBudget,
-      parent_code: row.item,
+      parent_code: row.item, // The selected item code from the dropdown
+      branch_code: branchCode, // Include branch code
       quarter: row.quarter,
-      new: row.new,
+      New: row.New,
       replacement: row.replacement,
     }));
   };
@@ -128,7 +135,7 @@ const SuplyItem = () => {
       unitPrice: "",
       totalBudget: "",
       quarter: "",
-      new: "",
+      New: "",
       replacement: "",
     };
 
@@ -137,7 +144,6 @@ const SuplyItem = () => {
       case "BankFormat": setBankFormat([...BankFormat, newRow]); break;
       case "Uniform": setUniform([...Uniform, newRow]); break;
       case "OtherSupplies": setOtherSupplies([...OtherSupplies, newRow]); break;
-      
     }
   };
 
@@ -145,7 +151,6 @@ const SuplyItem = () => {
     const updatedData = (type === "Stationary" ? Stationary :
       type === "BankFormat" ? BankFormat :
       type === "Uniform" ? Uniform :
-
       OtherSupplies).filter((row) => row.id !== id);
 
     switch (type) {
@@ -153,7 +158,6 @@ const SuplyItem = () => {
       case "BankFormat": setBankFormat(updatedData); break;
       case "Uniform": setUniform(updatedData); break;
       case "OtherSupplies": setOtherSupplies(updatedData); break;
-     
     }
   };
 
@@ -161,16 +165,14 @@ const SuplyItem = () => {
     const dataset = type === "Stationary" ? Stationary :
       type === "BankFormat" ? BankFormat :
       type === "Uniform" ? Uniform :
-    
       OtherSupplies;
 
     const formattedData = formatData(dataset);
     
     try {
-      await sendDataBackend(formattedData);
+      await sendDataBackend(formattedData); // Send the formatted data to the backend
     } catch (error) {
       console.error(`Failed to submit data for ${type}`, error);
-      alert(`Failed to submit data for ${type}`);
     }
   };
 
@@ -212,21 +214,21 @@ const SuplyItem = () => {
                     <td className="border p-2">
                       <select
                         value={row.item}
-                        onChange={(e) =>
-                          handleInputChange(type, row.id, "item", e.target.value)
-                        }
+                        onChange={(e) => {
+                          handleInputChange(type, row.id, "item", e.target.value);
+                        }}
                         className="w-full p-1 border rounded"
                       >
                         <option value="">Select</option>
-                        {sources.map((item) => (
-                          <option key={item.parent_code} value={item.parent_code}>
-                            {item.description}
+                        {sources.map((source) => (
+                          <option key={source.parent_code} value={source.parent_code}>
+                            {source.description}
                           </option>
                         ))}
                       </select>
                     </td>
                     {Object.keys(row)
-                      .filter((field) => field !== "id" && field !== "item")
+                      .filter((field) => field !== "id" && field !== "source" && field !== "item")
                       .map((field) => (
                         <td key={field} className="border p-2">
                           <input
@@ -271,7 +273,6 @@ const SuplyItem = () => {
       {renderTable("BankFormat", BankFormat, BankFormatSources)} 
       {renderTable("Uniform", Uniform, UniformSources)} 
       {renderTable("OtherSupplies", OtherSupplies, OtherSuppliesSources)} 
-       
     </div>
   );
 };

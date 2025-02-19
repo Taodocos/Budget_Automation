@@ -13,18 +13,20 @@ interface SourceItem {
 
 interface DataRow {
   id: string;
-  item: string;
+  item: string; // This will hold the selected item code from the dropdown
   quantity: string;
   unitPrice: string;
   totalBudget: string;
   quarter: string;
-  new: string;
+  New: string;
   replacement: string;
 }
 
 const CapitalItem = () => {
   const router = useRouter();
   const [branchCode, setBranchCode] = useState<string | null>(null);
+
+  // State for each category
   const [OfficeFurniture, setOfficeFurniture] = useState<DataRow[]>([]);
   const [OfficeEquipment, setOfficeEquipment] = useState<DataRow[]>([]);
   const [ITHardware, setITHardware] = useState<DataRow[]>([]);
@@ -35,16 +37,7 @@ const CapitalItem = () => {
   const [OtherItemDigBank, setOtherItemDigBank] = useState<DataRow[]>([]);
   const [ProjectCap, setProjectCap] = useState<DataRow[]>([]);
 
-  const [OfficeFurnitureSources, setOfficeFurnitureSources] = useState<SourceItem[]>([]);
-  const [OfficeEquipmentSources, setOfficeEquipmentSources]= useState<SourceItem[]>([]);
-  const [ITHardwareSources, setITHardwareSources] = useState<SourceItem[]>([]);
-  const [OtherITItemsSources, setOtherITItemsSources] = useState<SourceItem[]>([]);
-  const [SecurityItemsSources, setSecurityItemsSources]  = useState<SourceItem[]>([]);
-  const [VechileSources, setVechileSources] = useState<SourceItem[]>([]);
-  const [CounterAndAlSources, setCounterAndAlSources]= useState<SourceItem[]>([]);
-  const [OtherItemDigBankSources, setOtherItemDigBankSources]  = useState<SourceItem[]>([]);
-  const [ProjectCapSources, setProjectCapSources]= useState<SourceItem[]>([]);
-
+  const [sources, setSources] = useState<SourceItem[]>([]);
   const [expandedGrids, setExpandedGrids] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -71,38 +64,32 @@ const CapitalItem = () => {
   };
 
   const fetchAllSources = async () => {
-    if (expandedGrids.has("OfficeFurniture")) {
-      setOfficeFurniture(await fetchSources("86"));
+    const sourcesData = [];
+    const ids = {
+      OfficeFurniture: "434",
+      OfficeEquipment: "435",
+      ITHardware: "436",
+      OtherITItems: "437",
+      SecurityItems: "438",
+      Vechile: "439",
+      CounterAndAl: "440",
+      OtherItemDigBank: "441",
+      ProjectCap: "442",
+    };
+
+    for (const [key, value] of Object.entries(ids)) {
+      if (expandedGrids.has(key)) {
+        sourcesData.push(await fetchSources(value));
+      }
     }
-    if (expandedGrids.has("OfficeEquipment")) {
-      setOfficeEquipment(await fetchSources("87"));
-    }
-    if (expandedGrids.has("ITHardware")) {
-      setITHardware(await fetchSources("88"));
-    }
-    if (expandedGrids.has("OtherITItems")) {
-      setOtherITItems(await fetchSources("773"));
-    }
-    if (expandedGrids.has("SecurityItems")) {
-      setSecurityItems(await fetchSources("774"));
-    }
-    if (expandedGrids.has("Vechile")) {
-      setVechile(await fetchSources("774"));
-    }
-    if (expandedGrids.has("CounterAndAl")) {
-      setCounterAndAl(await fetchSources("774"));
-    }
-    if (expandedGrids.has("OtherItemDigBank")) {
-      setOtherItemDigBank(await fetchSources("774"));
-    }
-    if (expandedGrids.has("ProjectCap")) {
-      setProjectCap(await fetchSources("774"));
-    }
+
+    // Flatten the array of arrays and set sources
+    setSources(sourcesData.flat());
   };
 
   useEffect(() => {
     fetchAllSources();
-  }, [expandedGrids]);
+  }, [expandedGrids]);  // Trigger when expandedGrids changes
 
   const toggleGrid = (heading: string) => {
     const newSet = new Set(expandedGrids);
@@ -116,41 +103,21 @@ const CapitalItem = () => {
     field: keyof DataRow,
     value: string
   ) => {
-    const updatedData = (type === "OfficeFurniture" ? OfficeFurniture :
-      type === "OfficeEquipment" ? OfficeEquipment :
-      type === "ITHardware" ? ITHardware :
-      type === "OtherITItems" ? OtherITItems :
-      type === "SecurityItems" ? SecurityItems :
-      type === "Vechile" ? Vechile :
-      type === "CounterAndAl" ? CounterAndAl :
-      type === "OtherItemDigBank" ? OtherItemDigBank :
-      ProjectCap).map((row) =>
-      row.id === id ? { ...row, [field]: value } : row
-    );
+    const updateData = (setData: React.Dispatch<React.SetStateAction<DataRow[]>>, data: DataRow[]) => {
+      setData(data.map((row) => (row.id === id ? { ...row, [field]: value } : row)));
+    };
 
     switch (type) {
-      case "OfficeFurniture": setOfficeFurniture(updatedData); break;
-      case "OfficeEquipment": setOfficeEquipment(updatedData); break;
-      case "ITHardware": setITHardware(updatedData); break;
-      case "OtherITItems": setOtherITItems(updatedData); break;
-      case "SecurityItems": setSecurityItems(updatedData); break;
-      case "Vechile": setVechile(updatedData); break;
-      case "CounterAndAl": setCounterAndAl(updatedData); break;
-      case "OtherItemDigBank": setOtherItemDigBank(updatedData); break;
-      case "ProjectCap": setProjectCap(updatedData); break;
+      case "OfficeFurniture": updateData(setOfficeFurniture, OfficeFurniture); break;
+      case "OfficeEquipment": updateData(setOfficeEquipment, OfficeEquipment); break;
+      case "ITHardware": updateData(setITHardware, ITHardware); break;
+      case "OtherITItems": updateData(setOtherITItems, OtherITItems); break;
+      case "SecurityItems": updateData(setSecurityItems, SecurityItems); break;
+      case "Vechile": updateData(setVechile, Vechile); break;
+      case "CounterAndAl": updateData(setCounterAndAl, CounterAndAl); break;
+      case "OtherItemDigBank": updateData(setOtherItemDigBank, OtherItemDigBank); break;
+      case "ProjectCap": updateData(setProjectCap, ProjectCap); break;
     }
-  };
-
-  const formatData = (dataset: DataRow[]): FormData[] => {
-    return dataset.map(row => ({
-      quantity: row.quantity,
-      unitPrice: row.unitPrice,
-      totalBudget: row.totalBudget,
-      parent_code: row.item,
-      quarter: row.quarter,
-      new: row.new,
-      replacement: row.replacement,
-    }));
   };
 
   const handleAddRow = (type: string) => {
@@ -161,7 +128,7 @@ const CapitalItem = () => {
       unitPrice: "",
       totalBudget: "",
       quarter: "",
-      new: "",
+      New: "",
       replacement: "",
     };
 
@@ -179,27 +146,33 @@ const CapitalItem = () => {
   };
 
   const handleDeleteRow = (type: string, id: string) => {
-    const updatedData = (type === "OfficeFurniture" ? OfficeFurniture :
-      type === "OfficeEquipment" ? OfficeEquipment :
-      type === "ITHardware" ? ITHardware :
-      type === "OtherITItems" ? OtherITItems :
-      type === "SecurityItems" ? SecurityItems :
-      type === "Vechile" ? Vechile :
-      type === "CounterAndAl" ? CounterAndAl :
-      type === "OtherItemDigBank" ? OtherItemDigBank :
-      ProjectCap).filter((row) => row.id !== id);
+    const updatedData = (data: DataRow[]) => data.filter((row) => row.id !== id);
 
     switch (type) {
-      case "OfficeFurniture": setOfficeFurniture(updatedData); break;
-      case "OfficeEquipment": setOfficeEquipment(updatedData); break;
-      case "ITHardware": setITHardware(updatedData); break;
-      case "OtherITItems": setOtherITItems(updatedData); break;
-      case "SecurityItems": setSecurityItems(updatedData); break;
-      case "Vechile": setVechile(updatedData); break;
-      case "CounterAndAl": setCounterAndAl(updatedData); break;
-      case "OtherItemDigBank": setOtherItemDigBank(updatedData); break;
-      case "ProjectCap": setProjectCap(updatedData); break;
+      case "OfficeFurniture": setOfficeFurniture(updatedData(OfficeFurniture)); break;
+      case "OfficeEquipment": setOfficeEquipment(updatedData(OfficeEquipment)); break;
+      case "ITHardware": setITHardware(updatedData(ITHardware)); break;
+      case "OtherITItems": setOtherITItems(updatedData(OtherITItems)); break;
+      case "SecurityItems": setSecurityItems(updatedData(SecurityItems)); break;
+      case "Vechile": setVechile(updatedData(Vechile)); break;
+      case "CounterAndAl": setCounterAndAl(updatedData(CounterAndAl)); break;
+      case "OtherItemDigBank": setOtherItemDigBank(updatedData(OtherItemDigBank)); break;
+      case "ProjectCap": setProjectCap(updatedData(ProjectCap)); break;
     }
+  };
+
+  const formatData = (dataset: DataRow[]): FormData[] => {
+    return dataset.map(row => ({
+      item: row.item,
+      quantity: row.quantity,
+      unitPrice: row.unitPrice,
+      totalBudget: row.totalBudget,
+      parent_code: row.item, // The selected item code from the dropdown
+      branch_code: branchCode, // Include branch code
+      quarter: row.quarter,
+      New: row.New,
+      replacement: row.replacement,
+    }));
   };
 
   const handleSubmit = async (type: string) => {
@@ -214,16 +187,16 @@ const CapitalItem = () => {
       ProjectCap;
 
     const formattedData = formatData(dataset);
-    
     try {
       await sendDataBackend(formattedData);
+      alert("Data submitted successfully");
     } catch (error) {
-      console.error(`Failed to submit data for ${type}`, error);
-      alert(`Failed to submit data for ${type}`);
+      console.error("Failed to submit data", error);
+      alert("Failed to submit data");
     }
   };
 
-  const renderTable = (type: string, data: DataRow[], sources: SourceItem[]) => (
+  const renderTable = (type: string, data: DataRow[]) => (
     <div className="bg-white shadow-md rounded p-4 mb-4">
       <h2
         className="font-bold text-xl mb-2 text-black cursor-pointer"
@@ -261,29 +234,29 @@ const CapitalItem = () => {
                     <td className="border p-2">
                       <select
                         value={row.item}
-                        onChange={(e) =>
-                          handleInputChange(type, row.id, "item", e.target.value)
-                        }
+                        onChange={(e) => {
+                          handleInputChange(type, row.id, "item", e.target.value);
+                        }}
                         className="w-full p-1 border rounded"
                       >
                         <option value="">Select</option>
-                        {sources.map((item) => (
-                          <option key={item.parent_code} value={item.parent_code}>
-                            {item.description}
+                        {sources.map((source) => (
+                          <option key={source.parent_code} value={source.parent_code}>
+                            {source.description}
                           </option>
                         ))}
                       </select>
                     </td>
                     {Object.keys(row)
-                      .filter((field) => field !== "id" && field !== "item")
+                      .filter((field) => field !== "id" && field !== "item") // Exclude item from here
                       .map((field) => (
                         <td key={field} className="border p-2">
                           <input
                             type="text"
                             value={row[field as keyof DataRow]}
-                            onChange={(e) =>
-                              handleInputChange(type, row.id, field as keyof DataRow, e.target.value)
-                            }
+                            onChange={(e) => {
+                              handleInputChange(type, row.id, field as keyof DataRow, e.target.value);
+                            }}
                             className="w-full p-1 border rounded"
                           />
                         </td>
@@ -316,15 +289,15 @@ const CapitalItem = () => {
 
   return (
     <div className="p-6 bg-gray-100 h-screen overflow-y-auto">
-      {renderTable("OfficeFurniture", OfficeFurniture, OfficeFurnitureSources)} 
-      {renderTable("OfficeEquipment", OfficeEquipment, OfficeEquipmentSources)} 
-      {renderTable("ITHardware", ITHardware, ITHardwareSources)} 
-      {renderTable("OtherITItems", OtherITItems, OtherITItemsSources)} 
-      {renderTable("SecurityItems", SecurityItems, SecurityItemsSources)} 
-      {renderTable("Vechile", Vechile, VechileSources)} 
-      {renderTable("CounterAndAl", CounterAndAl, CounterAndAlSources)} 
-      {renderTable("Other Items for Digital Banking", OtherItemDigBank, OtherItemDigBankSources)} 
-      {renderTable("ProjectCap", ProjectCap, ProjectCapSources)} 
+      {renderTable("OfficeFurniture", OfficeFurniture)}
+      {renderTable("OfficeEquipment", OfficeEquipment)}
+      {renderTable("ITHardware", ITHardware)}
+      {renderTable("OtherITItems", OtherITItems)}
+      {renderTable("SecurityItems", SecurityItems)}
+      {renderTable("Vechile", Vechile)}
+      {renderTable("CounterAndAl", CounterAndAl)}
+      {renderTable("OtherItemDigBank", OtherItemDigBank)}
+      {renderTable("ProjectCap", ProjectCap)}
     </div>
   );
 };

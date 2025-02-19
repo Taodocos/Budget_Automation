@@ -3,51 +3,54 @@
 import { sendDataBackend } from "@/app/service/apiAddResouceMobData";
 import { fetchDataBackend } from "@/app/service/apiFetchEditData";
 import { useEffect, useState } from "react";
+import apiServices from "@/app/ExportApi";
+import { saveData } from "@/app/service/apiAddResMobRow";
+import { ReportFormData } from "@/app/service/apifetchResMon";
 
 
-// Define the type for the data rows
+
 interface DataRow {
-  id: string;
-  source: string;
-  actualMarch: string;
-  estimatedJune: string;
-  netIncrementPlan: string;
-  projectedJune: string;
-  Jul: string;
-  Aug: string;
-  Sep: string;
-  Oct: string;
-  Nov: string;
-  Dec: string;
-  Jan: string;
-  Feb: string;
-  Mar: string;
-  Apr: string;
-  May: string;
-  Jun: string;
-}
-
-
-interface FormData {
-  actual: string;
-  estimated: string;
-  netincrement: string;
-  projected: string;
-  parent_code: string;
-  Jul: string;
-  Aug: string;
-  Sep: string;
-  Oct: string;
-  Nov: string;
-  Dec: string;
-  Jan: string;
-  Feb: string;
-  Mar: string;
-  Apr: string;
-  May: string;
-  Jun: string;
-}
-
+    id: string;
+    source: string;
+    actualMarch: string;
+    estimatedJune: string;
+    netIncrementPlan: string;
+    projectedJune: string;
+    Jul: string;
+    Aug: string;
+    Sep: string;
+    Oct: string;
+    Nov: string;
+    Dec: string;
+    Jan: string;
+    Feb: string;
+    Mar: string;
+    Apr: string;
+    May: string;
+    Jun: string;
+    parent_code?: string; // Optional for the initial state
+  }
+  
+  interface FormData {
+    actual: string;
+    estimated: string;
+    netincrement: string;
+    projected: string;
+    parent_code: string; // For submission
+    parent_code_fetch?: string; // For fetching
+    Jul: string;
+    Aug: string;
+    Sep: string;
+    Oct: string;
+    Nov: string;
+    Dec: string;
+    Jan: string;
+    Feb: string;
+    Mar: string;
+    Apr: string;
+    May: string;
+    Jun: string;
+  }
 const ResourceMobilization = () => {
 
    
@@ -102,7 +105,7 @@ const ResourceMobilization = () => {
       estimatedJune: "",
       netIncrementPlan: "",
       projectedJune: "",
-      Jul: "",
+        Jul: "",
         Aug: "",
         Sep: "",
         Oct: "",
@@ -345,10 +348,112 @@ const ResourceMobilization = () => {
       Jun: "",
     },
   ]);
+  const assignParentCodes = () => {
+    const parentCodes = {
+        data: "8",
+        incomeData: "9",
+        additionalData: "10",
+        shareCapital: "11",
+    };
+
+    setData(prevData => prevData.map(row => ({
+        ...row,
+        parent_code: parentCodes.data,
+    })));
+
+    setIncomeData(prevData => prevData.map(row => ({
+        ...row,
+        parent_code: parentCodes.incomeData,
+    })));
+
+    setAdditionalData(prevData => prevData.map(row => ({
+        ...row,
+        parent_code: parentCodes.additionalData,
+    })));
+
+    setShareCapital(prevData => prevData.map(row => ({
+        ...row,
+        parent_code: parentCodes.shareCapital,
+    })));
+};
+
+useEffect(() => {
+    const storedBranchCode = sessionStorage.getItem("branch_code");
+    setBranchCode(storedBranchCode);
+}, []);
 
 
 
+
+const fetchData = async () => {
+    if (!branchCode) return;
+
+    try {
+        const sections = [
+            { key: "data", code: "8" },
+            { key: "incomeData", code: "9" },
+            { key: "additionalData", code: "10" },
+            { key: "shareCapital", code: "11" },
+        ];
+
+        for (const section of sections) {
+            console.log("Requesting data for branch_code:", branchCode, "with parent_code:", section.code);
+            const response = await apiServices.post('/get_bybranch_parentcode', {
+                branch_code: branchCode,
+                parent_code: section.code,
+            });
+
+            if (response.status === 204) {
+                console.warn(`No data found for ${section.key} with branch_code: ${branchCode} and parent_code: ${section.code}`);
+                continue; // Skip to the next section
+            }
+
+            if (response.status === 200) {
+                const fetchedData = response.data.data || [];
+                console.log(`Data received for ${section.key}:`, fetchedData);
+                
+                if (Array.isArray(fetchedData)) {
+                    const mappedData = fetchedData.map(item => ({
+                        id: item.parentcode,
+                        source: item.description,
+                        actualMarch: item.actual,
+                        estimatedJune: item.estimated,
+                        netIncrementPlan: item.netincrement,
+                        projectedJune: item.projected,
+                        Jul: item.jul,
+                        Aug: item.aug,
+                        Sep: item.sep,
+                        Oct: item.oct,
+                        Nov: item.nov,
+                        Dec: item.dec,
+                        Jan: item.jan,
+                        Feb: item.feb,
+                        Mar: item.mar,
+                        Apr: item.apr,
+                        May: item.may,
+                        Jun: item.jun,
+                    }));
+
+                    if (section.key === "data") setData(mappedData);
+                    else if (section.key === "incomeData") setIncomeData(mappedData);
+                    else if (section.key === "additionalData") setAdditionalData(mappedData);
+                    else if (section.key === "shareCapital") setShareCapital(mappedData);
+                }
+            } else {
+                console.error(`Failed to fetch data for ${section.key}:`, response.status);
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+};
+
+useEffect(() => {
+    fetchData(); 
+}, [branchCode]); 
   
+
+
   const handleInputChange = (id: string, field: keyof DataRow, value: string, dataset: "data" | "incomeData" | "additionalData" | "ShareCapital") => {
     const setter = dataset === "data" ? setData : dataset === "incomeData" ? setIncomeData : dataset === "additionalData" ? setAdditionalData : setShareCapital;
     const updatedData = (dataset === "data" ? data : dataset === "incomeData" ? incomeData : dataset === "additionalData" ? additionalData : ShareCapital).map((row) =>
@@ -380,6 +485,42 @@ const ResourceMobilization = () => {
         Jun: row.Jun,
     }));
 };
+const formatDataForRowSave = (row: DataRow): ReportFormData => ({
+    id: row.id, // Ensure this is included
+    actual: row.actualMarch,
+    estimated: row.estimatedJune,
+    netincrement: row.netIncrementPlan,
+    projected: row.projectedJune,
+    parentcode: row.id, // Correct mapping for parent code
+    branch_code: branchCode!, // Ensure branch code is not null
+    district_code: districtcode!, // Ensure district code is not null
+    jul: row.Jul,
+    aug: row.Aug,
+    sep: row.Sep,
+    oct: row.Oct,
+    nov: row.Nov,
+    dec: row.Dec,
+    jan: row.Jan,
+    feb: row.Feb,
+    mar: row.Mar,
+    apr: row.Apr,
+    may: row.May,
+    jun: row.Jun,
+    status: "",
+    description: ""
+});
+
+const saveRow = async (row: DataRow) => {
+    const formattedRowData = formatDataForRowSave(row);
+    try {
+        await saveData(formattedRowData); // Call your API to save the row data
+       // alert("Row saved successfully");
+    } catch (error) {
+        console.error("Failed to save row data:", error);
+        //alert("Save failed: " + error.message); // Display the error message
+    }
+};
+
 
 const renderTextBoxes = () => (
     <div className="mb-4">
@@ -505,6 +646,7 @@ const renderTable = (heading: string, dataset: DataRow[], datasetKey: "data" | "
         <th className="border p-2">Apr</th>
         <th className="border p-2">May</th>
         <th className="border p-2">Jun</th>
+        <th className="border p-2">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -639,6 +781,18 @@ const renderTable = (heading: string, dataset: DataRow[], datasetKey: "data" | "
                                             className="w-full p-1 border rounded"
                                         />
                                     </td>
+
+                                    <td className="border p-2">
+    <button
+        onClick={() => saveRow(row)} // Call the saveRow function with the current row
+        className="bg-blue-500 text-white p-2 rounded"
+    >
+        Save
+    </button>
+</td>
+
+
+
                                 </tr>
                                 
                             ))}
@@ -685,6 +839,7 @@ const renderTable = (heading: string, dataset: DataRow[], datasetKey: "data" | "
                     >
                         Submit
                     </button>
+                    
                    </div>
 
                    
