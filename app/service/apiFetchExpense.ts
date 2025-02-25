@@ -1,24 +1,13 @@
 import apiServices from '../ExportApi';
 
-export type ReportFormData = {
-    id: string;
-    branch_code: string;
-    // DeptDesc:string 
-    allowanceDesc: string; 
-    jul: string; 
-    aug: string; 
-    sep: string; 
-    oct: string; 
-    nov: string; 
-    dec: string; 
-    jan: string; 
-    feb: string; 
-    mar: string; 
-    apr: string; 
-    may: string; 
-    jun: string; 
-    new: string; 
-    replacement: string; 
+
+export interface ReportFormData { 
+  id: string; 
+  branch_code: string;
+  userId:string,
+  expensesdesc:string,
+  FiscalYear: string,
+  TotalAmount: string,
 }
 
 export const fetchDataBackend = async (branchCode: string): Promise<ReportFormData[]> => {
@@ -26,13 +15,13 @@ export const fetchDataBackend = async (branchCode: string): Promise<ReportFormDa
         const payload = { branch_code: branchCode };
         console.log("Payload being sent to backend:", JSON.stringify(payload, null, 2));
 
-        const response = await apiServices.post('/getallowances', payload);
+        const response = await apiServices.post('/getexpense', payload);
         console.log("API Response received:", JSON.stringify(response.data, null, 2)); 
 
         // Check if the response contains valid data
         if (response.data && Array.isArray(response.data) && response.data.length > 0) {
             const rowsWithId = response.data.map((row: any, index: number) => {
-                const uniqueId = `${branchCode}-${row.allowanceDesc}-${index}`; 
+                const uniqueId = `${branchCode}-${row.expensesdesc}-${index}`; 
                 return {
                     ...row,
                     id: uniqueId, 

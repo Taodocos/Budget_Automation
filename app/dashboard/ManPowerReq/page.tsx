@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { FormSubmissionData, sendDataBackend } from "@/app/service/addhumanres";
 import ExpenseTemplate from "../Income&Expenses/ExpenseTemplates/page";
 import { fetchSourcesById } from "@/app/service/apiFetchposition";
+import AllowGrid from "../HumanResource/page";
 
 interface SourceItem {
     jobPosId: string;
@@ -242,8 +243,11 @@ const ManPower = () => {
 
     return (
         <div className="p-6 bg-gray-100 h-screen overflow-y-auto">
+           
+          
             {renderTable()}
-            <ExpenseTemplate />
+            <AllowGrid/>
+          
         </div>
     );
 };

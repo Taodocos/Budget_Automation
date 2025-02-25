@@ -1451,6 +1451,7 @@ const ResourceAlloccation = () => {
 
   return (
     <div className="p-6 bg-black-100 h-screen overflow-y-auto">
+      
       {renderTextBoxes()}
       {renderTable("Outstanding Loans and Advances by Maturity", OutstandinLoan, "OutstandinLoan")}
       {renderTable("Outstanding loans and advances by Type", OutstandingByType, "OutstandingByType")}

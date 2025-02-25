@@ -9,7 +9,7 @@ const useFetchData = (branchCode: string | null) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!branchCode) return;
+            if (!branchCode) return;1
 
             try {
              

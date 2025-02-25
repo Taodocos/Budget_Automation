@@ -1,6 +1,5 @@
 import apiServices from '../ExportApi';
 
-// Define the structure of the report form data
 export interface ReportFormData {
     id: string;
     estimated: string;
@@ -26,46 +25,32 @@ export interface ReportFormData {
     jun: string;
 }
 
-// Define the expected response structure from the API
-interface ApiResponse {
-    data: ReportFormData[];
-}
-
 // Updated function to include status
-export const fetchDataBackend = async (
-    branchCode: string,
-    districtCode: string,
-    status?: string // Optional status parameter
-): Promise<ReportFormData[]> => {
+export const fetchDataBackend = async (branchCode: string): Promise<ReportFormData[]> => {
     try {
-        const payload = {
-            branch_code: branchCode,
-            district_code: districtCode.split(','),
-            status: status // Include status in the payload
-        };
+        const payload = { branch_code: branchCode };
         console.log("Payload being sent to backend:", JSON.stringify(payload, null, 2));
 
-        const response = await apiServices.post<ApiResponse>('/getformats_by_branch', payload);
+        const response = await apiServices.post('/getbranchreports', payload);
         console.log("Original API Response:", response.data);
 
-        // Check if the response contains data and map it
-        if (response.data?.data) { 
-            const rowsWithId = response.data.data.map((row, index) => {
+        // Check if response.data is an array or contains data in the expected structure
+        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+            const rowsWithId = response.data.map((row: any, index: number) => {
                 const uniqueId = `${row.branch_code}-${row.parentcode}-${index}`;
                 console.log("Generated Unique ID:", uniqueId);
                 return {
                     ...row,
                     id: uniqueId,
-                    parentcode: row.parentcode
                 };
             });
             return rowsWithId as ReportFormData[];
         } else {
             console.log("No data returned for the given branch code.");
-            return []; 
+            return [];
         }
     } catch (err) {
         console.error('Error fetching data:', err);
-        throw new Error('Failed to fetch data from the backend'); // Throw a more descriptive error
+        return [];
     }
 };

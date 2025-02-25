@@ -149,6 +149,7 @@ const AllowGrid = () => {
                 <table className="w-full table-auto border-collapse border border-gray-300">
                     <thead>
                         <tr className="bg-[#025AA2] text-left text-sm font-semibold text-[#fedc61]">
+                           {/* <th className="border p-2">Psition</th>  */}
                             <th className="border p-2">Allowance Desc</th>
                             <th className="border p-2">Jul</th>
                             <th className="border p-2">Aug</th>
@@ -168,6 +169,7 @@ const AllowGrid = () => {
                     <tbody>
                         {currentRows.map((row, index) => (
                             <tr key={`${row.allowanceDesc}-${index}`} className="text-sm text-gray-700">
+                                {/* <td className="border p-2">{row.DeptDesc}</td>  */}
                                 <td className="border p-2">{row.allowanceDesc}</td>
                                 <td className="border p-2">
                                     {editParentCode === index ? (

@@ -4,7 +4,7 @@ import apiServices from "@/app/ExportApi";
 import { fetchBranches } from "@/app/service/apiFetchBranch";
 import { useState, useEffect } from "react";
 
-const EditableGrid = () => {
+const TabGrid = () => {
     const [gridData, setGridData] = useState<any[]>([]);
     const [branches, setBranches] = useState<{ branch_code: string; branch_name: string }[]>([]);
     const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
@@ -22,18 +22,8 @@ const EditableGrid = () => {
     var status;
     
 
-    const [groupOperationalExpanded, setGroupOperationalExpanded] = useState(false);
-    const [groupIncomeExpanded, setGroupIncomeExpanded] = useState(false);
-    const [groupExpenditureExpanded, setGroupExpenditureExpanded] = useState(false);
-
-
-
-
     const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
     const [editValues, setEditValues] = useState<{ [key: string]: any }>({}); // Store values for editing
-
-    const [operationalFormatsExpanded, setOperationalFormatsExpanded] = useState(false);
-
 
     
     useEffect(() => {
@@ -3289,683 +3279,683 @@ console.log("reason to be send", reason);
         );
     };
     
-    const renderGridForSection33 = () => {
-        return (
-            <table className="w-full table-auto border-collapse border border-gray-300">
-                <thead>
-                    <tr className="bg-[#025AA2] text-left text-sm font-semibold text-[#fedc61]">
-                    <th className="border p-2">Allowance</th>
-                    <th className="border p-2">Jul</th>
-                    <th className="border p-2">Aug</th>
-                    <th className="border p-2">Sep</th>
-                    <th className="border p-2">Oct</th>
-                    <th className="border p-2">Nov</th>
-                    <th className="border p-2">Dec</th>
-                    <th className="border p-2">Jan</th>
-                    <th className="border p-2">Feb</th>
-                    <th className="border p-2">Mar</th>
-                    <th className="border p-2">Apr</th>
-                    <th className="border p-2">May</th>
-                    <th className="border p-2">Jun</th>
-                    <th className="border p-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {gridData.map((row) => (
-                    <tr key={row.id} className="text-sm text-gray-700">
-                        {editRowId === row.id ? (
-                            <>
-                                 <td className="border p-2">{row.allowanceDesc}</td>
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.jul}
-                                        onChange={(e) => handleChange('jul', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.aug}
-                                        onChange={(e) => handleChange('aug', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
+    // const renderGridForSection33 = () => {
+    //     return (
+    //         <table className="w-full table-auto border-collapse border border-gray-300">
+    //             <thead>
+    //                 <tr className="bg-[#025AA2] text-left text-sm font-semibold text-[#fedc61]">
+    //                 <th className="border p-2">Allowance</th>
+    //                 <th className="border p-2">Jul</th>
+    //                 <th className="border p-2">Aug</th>
+    //                 <th className="border p-2">Sep</th>
+    //                 <th className="border p-2">Oct</th>
+    //                 <th className="border p-2">Nov</th>
+    //                 <th className="border p-2">Dec</th>
+    //                 <th className="border p-2">Jan</th>
+    //                 <th className="border p-2">Feb</th>
+    //                 <th className="border p-2">Mar</th>
+    //                 <th className="border p-2">Apr</th>
+    //                 <th className="border p-2">May</th>
+    //                 <th className="border p-2">Jun</th>
+    //                 <th className="border p-2">Actions</th>
+    //             </tr>
+    //         </thead>
+    //         <tbody>
+    //             {gridData.map((row) => (
+    //                 <tr key={row.id} className="text-sm text-gray-700">
+    //                     {editRowId === row.id ? (
+    //                         <>
+    //                              <td className="border p-2">{row.allowanceDesc}</td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.jul}
+    //                                     onChange={(e) => handleChange('jul', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.aug}
+    //                                     onChange={(e) => handleChange('aug', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
 
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.aug}
-                                        onChange={(e) => handleChange('sep', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.aug}
+    //                                     onChange={(e) => handleChange('sep', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
 
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.aug}
-                                        onChange={(e) => handleChange('oct', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.aug}
+    //                                     onChange={(e) => handleChange('oct', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
 
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.aug}
-                                        onChange={(e) => handleChange('nov', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.aug}
+    //                                     onChange={(e) => handleChange('nov', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
 
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.aug}
-                                        onChange={(e) => handleChange('dec', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.aug}
+    //                                     onChange={(e) => handleChange('dec', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
 
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.feb}
-                                        onChange={(e) => handleChange('feb', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.mar}
-                                        onChange={(e) => handleChange('mar', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.apr}
-                                        onChange={(e) => handleChange('apr', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.feb}
+    //                                     onChange={(e) => handleChange('feb', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.mar}
+    //                                     onChange={(e) => handleChange('mar', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.apr}
+    //                                     onChange={(e) => handleChange('apr', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
 
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.may}
-                                        onChange={(e) => handleChange('may', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
-                                <td className="border p-2">
-                                    <input
-                                        type="number"
-                                        value={editValues.jun}
-                                        onChange={(e) => handleChange('jun', e.target.value)}
-                                        className="border rounded p-1"
-                                    />
-                                </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.may}
+    //                                     onChange={(e) => handleChange('may', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
+    //                             <td className="border p-2">
+    //                                 <input
+    //                                     type="number"
+    //                                     value={editValues.jun}
+    //                                     onChange={(e) => handleChange('jun', e.target.value)}
+    //                                     className="border rounded p-1"
+    //                                 />
+    //                             </td>
                             
                             
-                                <td className="border p-2">
-                                    <button onClick={() => handleSave(row)} className="bg-green-500 text-white p-1 rounded">Save</button>
-                                    <button onClick={handleCancel} className="bg-red-500 text-white p-1 rounded ml-2">Cancel</button>
-                                </td>
-                            </>
-                        ) : (
-                            <>
-                                <td className="border p-2">{row.allowanceDesc}</td>
-                                <td className="border p-2">{row.jul}</td>
-                                <td className="border p-2">{row.aug}</td>
-                                <td className="border p-2">{row.sep}</td>
-                                <td className="border p-2">{row.oct}</td>
-                                <td className="border p-2">{row.nov}</td>
-                                <td className="border p-2">{row.dec}</td>
-                                <td className="border p-2">{row.jan}</td>
-                                <td className="border p-2">{row.feb}</td>
-                                <td className="border p-2">{row.mar}</td>
-                                <td className="border p-2">{row.apr}</td>
-                                <td className="border p-2">{row.may}</td>
-                                <td className="border p-2">{row.jun}</td>
-                                <td className="border p-2">
-                                    <button onClick={() => handleEdit(row)} className="bg-blue-500 text-white p-1 rounded">Edit</button>
-                                </td>
-                            </>
-                        )}
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        );
-    };
+    //                             <td className="border p-2">
+    //                                 <button onClick={() => handleSave(row)} className="bg-green-500 text-white p-1 rounded">Save</button>
+    //                                 <button onClick={handleCancel} className="bg-red-500 text-white p-1 rounded ml-2">Cancel</button>
+    //                             </td>
+    //                         </>
+    //                     ) : (
+    //                         <>
+    //                             <td className="border p-2">{row.allowanceDesc}</td>
+    //                             <td className="border p-2">{row.jul}</td>
+    //                             <td className="border p-2">{row.aug}</td>
+    //                             <td className="border p-2">{row.sep}</td>
+    //                             <td className="border p-2">{row.oct}</td>
+    //                             <td className="border p-2">{row.nov}</td>
+    //                             <td className="border p-2">{row.dec}</td>
+    //                             <td className="border p-2">{row.jan}</td>
+    //                             <td className="border p-2">{row.feb}</td>
+    //                             <td className="border p-2">{row.mar}</td>
+    //                             <td className="border p-2">{row.apr}</td>
+    //                             <td className="border p-2">{row.may}</td>
+    //                             <td className="border p-2">{row.jun}</td>
+    //                             <td className="border p-2">
+    //                                 <button onClick={() => handleEdit(row)} className="bg-blue-500 text-white p-1 rounded">Edit</button>
+    //                             </td>
+    //                         </>
+    //                     )}
+    //                 </tr>
+    //             ))}
+    //             </tbody>
+    //         </table>
+    //     );
+    // };
     
 
  
     return (
-        <div className="p-6 bg-gray-100 overflow-hidden ">
-            {/* Dropdown for Branch Selection */}
-            <select
-                value={branchCode || ""}
-                onChange={(e) => setBranchCode(e.target.value)} // Allow changes to branch code
-                className="mb-4 p-2 border rounded text-black"
-            >
-                <option value="" disabled>Select a branch</option>
-                {branches.map((branch) => (
-                    <option key={branch.branch_code} value={branch.branch_code}>
-                        {`${branch.branch_code} - ${branch.branch_name}`}
-                    </option>
-                ))}
-            </select>
-  
-            <div className="bg-white shadow-md rounded p-4 font-bold bg-black-200 text-black ">
-                {/* Collapsible Section 1 */}
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section1')} className="flex items-center">
-                        {expandedSections['section1'] ? "Conventional Deposit" : "Conventional Deposit"}
-                        
-                    </button>
-                    {expandedSections['section1'] && (
-                        <div className="mt-2">
-                            {renderGridForSection1()}
-                            <div className="mt-2">
-                             
-                            <textarea
-                                  className="mt-2 w-full border rounded p-2"
-                                  placeholder="Enter notes for Section 1"
-                                  value={sectionNotes['section1'] || ""}
-                                  onChange={(e) => handleNoteChange('section1', e.target.value)}
-                              />
-                          </div>
-                            <div className="flex justify-end mt-4">
-                                  <button 
-                  onClick={() => {
+      <div className="p-6 bg-gray-100 overflow-hidden ">
+          {/* Dropdown for Branch Selection */}
+          <select
+              value={branchCode || ""}
+              onChange={(e) => setBranchCode(e.target.value)} // Allow changes to branch code
+              className="mb-4 p-2 border rounded text-black"
+          >
+              <option value="" disabled>Select a branch</option>
+              {branches.map((branch) => (
+                  <option key={branch.branch_code} value={branch.branch_code}>
+                      {`${branch.branch_code} - ${branch.branch_name}`}
+                  </option>
+              ))}
+          </select>
+
+          <div className="bg-white shadow-md rounded p-4 font-bold bg-black-200 text-black ">
+              {/* Collapsible Section 1 */}
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section1')} className="flex items-center">
+                      {expandedSections['section1'] ? "Conventional Deposit" : "Conventional Deposit"}
+                      
+                  </button>
+                  {expandedSections['section1'] && (
+                      <div className="mt-2">
+                          {renderGridForSection1()}
+                          {/* <div className="mt-2">
+                           
+                          <textarea
+                                className="mt-2 w-full border rounded p-2"
+                                placeholder="Enter notes for Section 1"
+                                value={sectionNotes['section1'] || ""}
+                                onChange={(e) => handleNoteChange('section1', e.target.value)}
+                            />
+                        </div>
+                          <div className="flex justify-end mt-4">
+                                <button 
+                onClick={() => {
+                   
+                    handleApprove({ parent_code: parentCodes['section1'] });
+                }} 
+                className="bg-green-500 text-white p-2 rounded mr-2">
+                Approve
+            </button>    <button onClick={() => handleReject({ parent_code: parentCodes['section1'] })} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div>
+                             */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section2')} className="flex items-center">
+                      {expandedSections['section2'] ? "Interest Free banking" : "Interest Free banking"}
+                  </button>
+                  {expandedSections['section2'] && (
+                      <div className="mt-2">
+                          {renderGridForSection2()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-100 overflow-y-auto">
+                  <button onClick={() => toggleSection('section3')} className="flex items-center">
+                      {expandedSections['section3'] ? "FCY Sources/ USDT" : "FCY Sources/ USDT"}
+                  </button>
+                  {expandedSections['section3'] && (
+                      <div className="mt-2">
+                          {renderGridForSection3()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section4')} className="flex items-center">
+                      {expandedSections['section4'] ? "Share Capital" : "Share Capital"}
+                  </button>
+                  {expandedSections['section4'] && (
+                      <div className="mt-2">
+                          {renderGridForSection4()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section5')} className="flex items-center">
+                      {expandedSections['section5'] ? "Outstanding Loans and Advances by Maturity" : "Outstanding Loans and Advances by Maturity"}
+                  </button>
+                  {expandedSections['section5'] && (
+                      <div className="mt-2">
+                          {renderGridForSection5()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section6')} className="flex items-center">
+                      {expandedSections['section6'] ? "Outstanding loans and advances by Type" : "Outstanding loans and advances by Type"}
+                  </button>
+                  {expandedSections['section6'] && (
+                      <div className="mt-2">
+                          {renderGridForSection6()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section7')} className="flex items-center">
+                      {expandedSections['section7'] ? "Outstanding by Economic Sector" : "Outstanding by Economic Sector"}
+                  </button>
+                  {expandedSections['section7'] && (
+                      <div className="mt-2">
                      
-                      handleApprove({ parent_code: parentCodes['section1'] });
-                  }} 
-                  className="bg-green-500 text-white p-2 rounded mr-2">
-                  Approve
-              </button>    <button onClick={() => handleReject({ parent_code: parentCodes['section1'] })} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                              
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section2')} className="flex items-center">
-                        {expandedSections['section2'] ? "Interest Free banking" : "Interest Free banking"}
-                    </button>
-                    {expandedSections['section2'] && (
-                        <div className="mt-2">
-                            {renderGridForSection2()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-100 overflow-y-auto">
-                    <button onClick={() => toggleSection('section3')} className="flex items-center">
-                        {expandedSections['section3'] ? "FCY Sources/ USDT" : "FCY Sources/ USDT"}
-                    </button>
-                    {expandedSections['section3'] && (
-                        <div className="mt-2">
-                            {renderGridForSection3()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section4')} className="flex items-center">
-                        {expandedSections['section4'] ? "Share Capital" : "Share Capital"}
-                    </button>
-                    {expandedSections['section4'] && (
-                        <div className="mt-2">
-                            {renderGridForSection4()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section5')} className="flex items-center">
-                        {expandedSections['section5'] ? "Outstanding Loans and Advances by Maturity" : "Outstanding Loans and Advances by Maturity"}
-                    </button>
-                    {expandedSections['section5'] && (
-                        <div className="mt-2">
-                            {renderGridForSection5()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section6')} className="flex items-center">
-                        {expandedSections['section6'] ? "Outstanding loans and advances by Type" : "Outstanding loans and advances by Type"}
-                    </button>
-                    {expandedSections['section6'] && (
-                        <div className="mt-2">
-                            {renderGridForSection6()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section7')} className="flex items-center">
-                        {expandedSections['section7'] ? "Outstanding by Economic Sector" : "Outstanding by Economic Sector"}
-                    </button>
-                    {expandedSections['section7'] && (
-                        <div className="mt-2">
-                       
-                            {renderGridForSection7()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section8')} className="flex items-center">
-                        {expandedSections['section8'] ? " Disbursement" : " Disbursement"}
-                    </button>
-                    {expandedSections['section8'] && (
-                        <div className="mt-2">
-                            {renderGridForSection8()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section9')} className="flex items-center">
-                        {expandedSections['section9'] ? "Collection" : "Collection"}
-                    </button>
-                    {expandedSections['section9'] && (
-                        <div className="mt-2">
-                            {renderGridForSection9()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                   {/* Collapsible Section 2 */}
-                   <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section10')} className="flex items-center">
-                        {expandedSections['section10'] ? "CustomerAttraction" : "CustomerAttraction"}
-                    </button>
-                    {expandedSections['section10'] && (
-                        <div className="mt-2">
-                            {renderGridForSection10()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section11')} className="flex items-center">
-                        {expandedSections['section11'] ? "DigitalBankingSubs" : "DigitalBankingSubs"}
-                    </button>
-                    {expandedSections['section11'] && (
-                        <div className="mt-2">
-                            {renderGridForSection11()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section12')} className="flex items-center">
-                        {expandedSections['section12'] ? "Interest Income" : "Interest Income"}
-                    </button>
-                    {expandedSections['section12'] && (
-                        <div className="mt-2">
-                            {renderGridForSection12()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section13')} className="flex items-center">
-                        {expandedSections['section13'] ? "Commission Income" : "Commission Income"}
-                    </button>
-                    {expandedSections['section13'] && (
-                        <div className="mt-2">
-                            {renderGridForSection13()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section14')} className="flex items-center">
-                        {expandedSections['section14'] ? "Other Income" : "Other Income"}
-                    </button>
-                    {expandedSections['section14'] && (
-                        <div className="mt-2">
-                            {renderGridForSection14()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section15')} className="flex items-center">
-                        {expandedSections['section15'] ? "Interest Expense" : "Interest Expense"}
-                    </button>
-                    {expandedSections['section15'] && (
-                        <div className="mt-2">
-                            {renderGridForSection15()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section16')} className="flex items-center">
-                        {expandedSections['section16'] ? "Salary Benefit" : "Salary Benefit"}
-                    </button>
-                    {expandedSections['section16'] && (
-                        <div className="mt-2">
-                            {renderGridForSection16()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section17')} className="flex items-center">
-                        {expandedSections['section17'] ? "General Expense" : "General Expense"}
-                    </button>
-                    {expandedSections['section17'] && (
-                        <div className="mt-2">
-                            {renderGridForSection17()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section18')} className="flex items-center">
-                        {expandedSections['section18'] ? "Controllable Expenses HQ" : "Controllable Expenses HQ"}
-                    </button>
-                    {expandedSections['section18'] && (
-                        <div className="mt-2">
-                            {renderGridForSection18()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section19')} className="flex items-center">
-                        {expandedSections['section19'] ? "Controllable Expenses Branches" : "Controllable Expenses Branches"}
-                    </button>
-                    {expandedSections['section19'] && (
-                        <div className="mt-2">
-                            {renderGridForSection19()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section20')} className="flex items-center">
-                        {expandedSections['section20'] ? "Office Furniture" : "Office Furniture"}
-                    </button>
-                    {expandedSections['section20'] && (
-                        <div className="mt-2">
-                            {renderGridForSection20()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section21')} className="flex items-center">
-                        {expandedSections['section21'] ? "Office Equipment" : "Office Equipment"}
-                    </button>
-                    {expandedSections['section21'] && (
-                        <div className="mt-2">
-                            {renderGridForSection21()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section22')} className="flex items-center">
-                        {expandedSections['section22'] ? "IT Hardware" : "IT Hardware"}
-                    </button>
-                    {expandedSections['section22'] && (
-                        <div className="mt-2">
-                            {renderGridForSection22()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section23')} className="flex items-center">
-                        {expandedSections['section23'] ? "Other IT Items" : "Other IT Items"}
-                    </button>
-                    {expandedSections['section23'] && (
-                        <div className="mt-2">
-                            {renderGridForSection23()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section24')} className="flex items-center">
-                        {expandedSections['section24'] ? "Security Items" : "Security Items"}
-                    </button>
-                    {expandedSections['section24'] && (
-                        <div className="mt-2">
-                            {renderGridForSection24()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section25')} className="flex items-center">
-                        {expandedSections['section25'] ? "Vechile" : "Vechile"}
-                    </button>
-                    {expandedSections['section25'] && (
-                        <div className="mt-2">
-                            {renderGridForSection25()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section26')} className="flex items-center">
-                        {expandedSections['section26'] ? "Counter And Al" : "Counter And Al"}
-                    </button>
-                    {expandedSections['section26'] && (
-                        <div className="mt-2">
-                            {renderGridForSection26()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section27')} className="flex items-center">
-                        {expandedSections['section27'] ? "Other Items for Digital Banking" : "Other Items for Digital Banking"}
-                    </button>
-                    {expandedSections['section27'] && (
-                        <div className="mt-2">
-                            {renderGridForSection27()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section28')} className="flex items-center">
-                        {expandedSections['section28'] ? "Project Cap" : "Project Cap"}
-                    </button>
-                    {expandedSections['section28'] && (
-                        <div className="mt-2">
-                            {renderGridForSection28()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section29')} className="flex items-center">
-                        {expandedSections['section29'] ? "Stationary" : "Stationary"}
-                    </button>
-                    {expandedSections['section29'] && (
-                        <div className="mt-2">
-                            {renderGridForSection29()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section30')} className="flex items-center">
-                        {expandedSections['section30'] ? "BankFormat" : "BankFormat"}
-                    </button>
-                    {expandedSections['section30'] && (
-                        <div className="mt-2">
-                            {renderGridForSection30()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section31')} className="flex items-center">
-                        {expandedSections['section31'] ? "Uniform" : "Uniform"}
-                    </button>
-                    {expandedSections['section31'] && (
-                        <div className="mt-2">
-                            {renderGridForSection31()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section32')} className="flex items-center">
-                        {expandedSections['section32'] ? "OtherSupplies" : "OtherSupplies"}
-                    </button>
-                    {expandedSections['section32'] && (
-                        <div className="mt-2">
-                            {renderGridForSection32()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                <div className="mt-4 max-h-60 overflow-y-auto">
-                    <button onClick={() => toggleSection('section33')} className="flex items-center">
-                        {expandedSections['section33'] ? "Man Power Plan" : "Man Power Plan"}
-                    </button>
-                    {expandedSections['section33'] && (
-                        <div className="mt-2">
-                            {renderGridForSection33()}
-                            <div className="flex justify-end mt-4">
-                                  <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
-                                  <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
-                              </div>
-                        </div>
-                    )}
-                </div>
-  
-                {/* Add more sections as needed */}
-            </div>
-            <div className="mt-4">
-            
-            </div>
-        </div>
-    );
+                          {renderGridForSection7()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section8')} className="flex items-center">
+                      {expandedSections['section8'] ? " Disbursement" : " Disbursement"}
+                  </button>
+                  {expandedSections['section8'] && (
+                      <div className="mt-2">
+                          {renderGridForSection8()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section9')} className="flex items-center">
+                      {expandedSections['section9'] ? "Collection" : "Collection"}
+                  </button>
+                  {expandedSections['section9'] && (
+                      <div className="mt-2">
+                          {renderGridForSection9()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+                 {/* Collapsible Section 2 */}
+                 <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section10')} className="flex items-center">
+                      {expandedSections['section10'] ? "CustomerAttraction" : "CustomerAttraction"}
+                  </button>
+                  {expandedSections['section10'] && (
+                      <div className="mt-2">
+                          {renderGridForSection10()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section11')} className="flex items-center">
+                      {expandedSections['section11'] ? "DigitalBankingSubs" : "DigitalBankingSubs"}
+                  </button>
+                  {expandedSections['section11'] && (
+                      <div className="mt-2">
+                          {renderGridForSection11()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section12')} className="flex items-center">
+                      {expandedSections['section12'] ? "Interest Income" : "Interest Income"}
+                  </button>
+                  {expandedSections['section12'] && (
+                      <div className="mt-2">
+                          {renderGridForSection12()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section13')} className="flex items-center">
+                      {expandedSections['section13'] ? "Commission Income" : "Commission Income"}
+                  </button>
+                  {expandedSections['section13'] && (
+                      <div className="mt-2">
+                          {renderGridForSection13()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section14')} className="flex items-center">
+                      {expandedSections['section14'] ? "Other Income" : "Other Income"}
+                  </button>
+                  {expandedSections['section14'] && (
+                      <div className="mt-2">
+                          {renderGridForSection14()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section15')} className="flex items-center">
+                      {expandedSections['section15'] ? "Interest Expense" : "Interest Expense"}
+                  </button>
+                  {expandedSections['section15'] && (
+                      <div className="mt-2">
+                          {renderGridForSection15()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section16')} className="flex items-center">
+                      {expandedSections['section16'] ? "Salary Benefit" : "Salary Benefit"}
+                  </button>
+                  {expandedSections['section16'] && (
+                      <div className="mt-2">
+                          {renderGridForSection16()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section17')} className="flex items-center">
+                      {expandedSections['section17'] ? "General Expense" : "General Expense"}
+                  </button>
+                  {expandedSections['section17'] && (
+                      <div className="mt-2">
+                          {renderGridForSection17()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section18')} className="flex items-center">
+                      {expandedSections['section18'] ? "Controllable Expenses HQ" : "Controllable Expenses HQ"}
+                  </button>
+                  {expandedSections['section18'] && (
+                      <div className="mt-2">
+                          {renderGridForSection18()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section19')} className="flex items-center">
+                      {expandedSections['section19'] ? "Controllable Expenses Branches" : "Controllable Expenses Branches"}
+                  </button>
+                  {expandedSections['section19'] && (
+                      <div className="mt-2">
+                          {renderGridForSection19()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section20')} className="flex items-center">
+                      {expandedSections['section20'] ? "Office Furniture" : "Office Furniture"}
+                  </button>
+                  {expandedSections['section20'] && (
+                      <div className="mt-2">
+                          {renderGridForSection20()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section21')} className="flex items-center">
+                      {expandedSections['section21'] ? "Office Equipment" : "Office Equipment"}
+                  </button>
+                  {expandedSections['section21'] && (
+                      <div className="mt-2">
+                          {renderGridForSection21()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section22')} className="flex items-center">
+                      {expandedSections['section22'] ? "IT Hardware" : "IT Hardware"}
+                  </button>
+                  {expandedSections['section22'] && (
+                      <div className="mt-2">
+                          {renderGridForSection22()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section23')} className="flex items-center">
+                      {expandedSections['section23'] ? "Other IT Items" : "Other IT Items"}
+                  </button>
+                  {expandedSections['section23'] && (
+                      <div className="mt-2">
+                          {renderGridForSection23()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section24')} className="flex items-center">
+                      {expandedSections['section24'] ? "Security Items" : "Security Items"}
+                  </button>
+                  {expandedSections['section24'] && (
+                      <div className="mt-2">
+                          {renderGridForSection24()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section25')} className="flex items-center">
+                      {expandedSections['section25'] ? "Vechile" : "Vechile"}
+                  </button>
+                  {expandedSections['section25'] && (
+                      <div className="mt-2">
+                          {renderGridForSection25()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section26')} className="flex items-center">
+                      {expandedSections['section26'] ? "Counter And Al" : "Counter And Al"}
+                  </button>
+                  {expandedSections['section26'] && (
+                      <div className="mt-2">
+                          {renderGridForSection26()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section27')} className="flex items-center">
+                      {expandedSections['section27'] ? "Other Items for Digital Banking" : "Other Items for Digital Banking"}
+                  </button>
+                  {expandedSections['section27'] && (
+                      <div className="mt-2">
+                          {renderGridForSection27()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section28')} className="flex items-center">
+                      {expandedSections['section28'] ? "Project Cap" : "Project Cap"}
+                  </button>
+                  {expandedSections['section28'] && (
+                      <div className="mt-2">
+                          {renderGridForSection28()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section29')} className="flex items-center">
+                      {expandedSections['section29'] ? "Stationary" : "Stationary"}
+                  </button>
+                  {expandedSections['section29'] && (
+                      <div className="mt-2">
+                          {renderGridForSection29()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section30')} className="flex items-center">
+                      {expandedSections['section30'] ? "BankFormat" : "BankFormat"}
+                  </button>
+                  {expandedSections['section30'] && (
+                      <div className="mt-2">
+                          {renderGridForSection30()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section31')} className="flex items-center">
+                      {expandedSections['section31'] ? "Uniform" : "Uniform"}
+                  </button>
+                  {expandedSections['section31'] && (
+                      <div className="mt-2">
+                          {renderGridForSection31()}
+                          {/* <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div> */}
+                      </div>
+                  )}
+              </div>
+
+              <div className="mt-4 max-h-60 overflow-y-auto">
+                  <button onClick={() => toggleSection('section32')} className="flex items-center">
+                      {expandedSections['section32'] ? "OtherSupplies" : "OtherSupplies"}
+                  </button>
+                  {expandedSections['section32'] && (
+                      <div className="mt-2">
+                          {renderGridForSection32()}
+                          <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div>
+                      </div>
+                  )}
+              </div>
+
+              {/* <div className="mb-4">
+                  <button onClick={() => toggleSection('section33')} className="flex items-center">
+                      {expandedSections['section33'] ? "OtherSupplies" : "OtherSupplies"}
+                  </button>
+                  {expandedSections['section33'] && (
+                      <div className="mt-2">
+                          {renderGridForSection33()}
+                          <div className="flex justify-end mt-4">
+                                <button onClick={handleApprove} className="bg-green-500 text-white p-2 rounded mr-2">Approve</button>
+                                <button onClick={handleReject} className="bg-red-500 text-white p-2 rounded">Reject</button>
+                            </div>
+                      </div>
+                  )}
+              </div> */}
+
+              {/* Add more sections as needed */}
+          </div>
+          <div className="mt-4">
+          
+          </div>
+      </div>
+  );
 };
 
-export default EditableGrid;
+export default TabGrid;

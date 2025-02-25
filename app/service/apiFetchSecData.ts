@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("Payload being sent to external API:", JSON.stringify(payload, null, 2));
             
       
-            const response = await apiServices.post('getformats_by_branch', payload);
+            const response = await apiServices.post('/getformats_by_branch', payload);
 
             if (response.status !== 200) {
                 return res.status(response.status).json({ error: 'Failed to fetch data from external API' });

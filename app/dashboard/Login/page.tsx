@@ -42,7 +42,8 @@ const Login = () => {
                 sessionStorage.setItem('IsDis',data.IsDis);
                 sessionStorage.setItem('IsBus',data.IsBus);
                 sessionStorage.setItem('IsBan',data.IsBan);
-
+                sessionStorage.setItem('IsDig',data.IsDig);
+                sessionStorage.setItem('IsStr',data.IsStr);
 
     console.log("session", data.branch_code, data.district_code)
     

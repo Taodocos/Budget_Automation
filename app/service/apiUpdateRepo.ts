@@ -28,7 +28,9 @@ export const saveData = async (data: ReportFormData) => {
         };
 
         // Make the API call to update data
+        console.log("tobe saved",formattedData)
         const response = await apiServices.put(`/updateFormats`, formattedData);
+        
         window.alert(`Data updated successfully`);
         return response.data;
 

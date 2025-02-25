@@ -26,7 +26,9 @@ export async function POST(request: Request) {
                 IsCoo:apiResponse.data.IsCoo,
                 IsDis:apiResponse.data.IsDis,
                 IsBus:apiResponse.data.IsBus,
-                IsBan:apiResponse.data.IsBan
+                IsBan:apiResponse.data.IsBan,
+                IsDig:apiResponse.data.IsDig,
+                IsStr:apiResponse.data.IsStr
                 },
                   
                    { status: 200 });

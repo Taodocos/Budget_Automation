@@ -1,15 +1,13 @@
 import axios from "axios";
 import apiServices from "../ExportApi";
 
-// Define the structure for form data
+
 export type FormData = {
   item: string;
   quantity: string;
-  unitPrice: string;
-  totalBudget: string;
   parent_code: string;
   quarter: string;
-  New: string; // Consider renaming to "isNew" for clarity
+  New: string; 
   replacement: string; 
 };
 
@@ -18,15 +16,14 @@ export type DataRow = {
   id: string; 
   item: string; 
   quantity: string;
-  unitPrice: string;
-  totalBudget: string;
   quarter: string;
   branch_code: string;
-  New: string; // Consider renaming to "isNew" for consistency
+  parent_code: string;
+  New: string;
   replacement: string;
 };
 
-// Function to trim whitespace from all fields in FormData
+
 const trimData = (data: FormData): FormData => {
   return Object.fromEntries(
     Object.entries(data).map(([key, value]) => [key, value.trim()])
