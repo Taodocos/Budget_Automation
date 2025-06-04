@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json(); // Parse the JSON body
-    console.log("Data received:", body); // Log the received data
+export async function POST(req: NextRequest) {
+    const { username, password } = await req.json();
 
-    return NextResponse.json({ message: "Data received successfully!" }, { status: 200 });
-  } catch (error) {
-    console.error("Error handling request:", error);
-    return NextResponse.json({ message: "Failed to process request" }, { status: 500 });
-  }
-}
+    // Simulate authentication logic
+    const isAuthenticated = username === 'validUser' && password === 'validPassword'; // Replace with real logic
 
-export async function GET() {
-  return NextResponse.json({ message: "GET method not allowed for this route" }, { status: 405 });
+    if (isAuthenticated) {
+        const response = NextResponse.redirect('/dashboard');
+        response.cookies.set('userId', 'someUserId', { path: '/' }); // Set your user ID here
+        return response;
+    }
+
+    return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
 }

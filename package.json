@@ -15,11 +15,16 @@
     "@mui/x-data-grid": "^7.23.6",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
+    "exceljs": "^4.4.0",
+    "glob": "^11.0.1",
     "heroicons": "^2.2.0",
+    "lru-cache": "^11.0.2",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "rimraf": "^6.0.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

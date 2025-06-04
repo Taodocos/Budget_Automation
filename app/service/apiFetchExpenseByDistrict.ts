@@ -1,23 +1,19 @@
 import apiServices from '../ExportApi';
 
-
-export interface ReportFormData { 
+export interface ReportFormData {
+  branch_code: string; // Change from any to string
   id: string; 
-  //branch_code: string;
-  parentCode:string;
-  userId:string,
-  expensesdesc:string,
-  FiscalYear: string,
-  totalAmount: string,
+  parentCode: string;
+  userId: string;
+  expensesdesc: string;
+  FiscalYear: string;
+  totalAmount: string;
 }
-
-
 
 export const fetchSourcesById = async () => {
   try {
     const response = await apiServices.get(`/getexpensebydistrict`);
 
-   
     if (!response || !response.data) {
       throw new Error('No data found or invalid response');
     }

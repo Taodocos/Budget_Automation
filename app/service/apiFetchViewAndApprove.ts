@@ -25,7 +25,30 @@ export interface ReportFormData {
     jun: string;
 }
 
-// Updated function to include status
+// Define the interface for the API response
+export interface ApiResponseData {
+    branch_code: string;
+    parentcode: string;
+    estimated: string;
+    actual: string;
+    netincrement: string; 
+    projected: string;
+    status: string;
+    description: string;
+    jul: string;  
+    aug: string;
+    sep: string;
+    oct: string;
+    nov: string;
+    dec: string;
+    jan: string;
+    feb: string;
+    mar: string;
+    apr: string;
+    may: string;
+    jun: string;
+}
+
 export const fetchDataBackend = async (branchCode: string): Promise<ReportFormData[]> => {
     try {
         const payload = { branch_code: branchCode };
@@ -34,9 +57,8 @@ export const fetchDataBackend = async (branchCode: string): Promise<ReportFormDa
         const response = await apiServices.post('/getbranchreports', payload);
         console.log("Original API Response:", response.data);
 
-        // Check if response.data is an array or contains data in the expected structure
         if (response.data && Array.isArray(response.data) && response.data.length > 0) {
-            const rowsWithId = response.data.map((row: any, index: number) => {
+            const rowsWithId = response.data.map((row: ApiResponseData, index: number) => {
                 const uniqueId = `${row.branch_code}-${row.parentcode}-${index}`;
                 console.log("Generated Unique ID:", uniqueId);
                 return {

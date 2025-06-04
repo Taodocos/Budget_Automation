@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ResourceMobilization from "./operational-formats/Resource Mobilization/page";
 import ResourceAlloccation from "./operational-formats/Resource Allocation/page";
-import Report from "./Report/page";
+
 import EditableGrid from "./view/page";
 import ExpenseTemplate from "./Income&Expenses/ExpenseTemplates/page";
 import IncomeTemplate from "./Income&Expenses/IncomeTemplates/page";
@@ -11,17 +11,30 @@ import CapitalItem from "./Capital&Supplies/CapitalItem/page";
 import UnitPrice from "./UnitPrice/page";
 import SuplyItem from "./Capital&Supplies/SuplyItem/page";
 import ManPower from "./ManPowerReq/page";
-import HrGrid from "./HumanResource/page";
-import TabGrid from "./ReportTabs/page";
-import CapGrid from "./ViewOnlyCap/page";
-import ManGrid from "./OnlyManPO/page";
-import ExpenseByDiGrid from "./viewExpenseByDistrict/page";
-import ExpenditureByDiGrid from "./ViewCapitalExpenditureByDistrict/page";
+import DisapGrid from "./DistrictChief/ViewAndApprove/page";
+import DisVGrid from "./DistrictChief/ViewForDistrict/page";
+import NewManPower from "./ChiefPeople/newBranchReq/page";
+import ManDisGrid from "./ChiefPeople/ManByDistrict/page";
+import AppExpenditureByDiGrid from "./CoorporateChief/ApproveCapExByDistrict/page";
+import ExpenditureByDiGrid from "./CoorporateChief/ViewCapitalExpenditureByDistrict/page";
+import CapByBrGrid from "./CoorporateChief/ViewCapByBranch/page";
+import Manapp from "./ChiefPeople/ApproveByDistrict/page";
+import FcyByBrGrid from "./BankingChief/ViewFcyByBranch/page";
+import FcyBydisGrid from "./BankingChief/ViewFcyByDistrict/page";
+import DisumnGrid from "./StrategyChief/ViewSumByDistrict/page";
+import withAuth from "../api/auth";
+
+
+
+
+
 
 const Dashboard = () => {
-  const [districtRight, setDistrictRight] = useState<string | null>(null);
-  const [branchCode, setBranchCode] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
+
+  
+
+
+  
   const [isHr, setIsHr] = useState<boolean>(false);
   const [isCoo, setIsCoo] = useState<boolean>(false);
   const [isDis, setIsDis] = useState<boolean>(false);
@@ -30,15 +43,10 @@ const Dashboard = () => {
   const [isDig, setIsDig] = useState<boolean>(false);
   const [isStr, setIsStr] = useState<boolean>(false);
 
+ 
+
   useEffect(() => {
-    const storedDistrictRight = sessionStorage.getItem("district_code");
-    setDistrictRight(storedDistrictRight);
-    
-    const storedBranchCode = sessionStorage.getItem("branch_code");
-    setBranchCode(storedBranchCode);
-    
-    const storedUserId = sessionStorage.getItem("userId");
-    setUserId(storedUserId);
+  
     
     setIsHr(Number(sessionStorage.getItem("IsHr")) === 1);
     setIsStr(Number(sessionStorage.getItem("IsStr")) === 1);
@@ -52,33 +60,50 @@ const Dashboard = () => {
 
   console.log(isHr,isCoo,isDis,isBus,isBan,isDig,isStr)
 
+
+
   type TabKey =
     | "Operational Formats"
     | "Income & Expenses accounts formats"
     | "Capital Expenditure Budget formats"
-    | "AuthoriationMenu"
-    | "Report"
+    | "ApproveExpenditure"
+    | "ViewExpenditureByBranch"
+    | "ViewExpenditureByDistrict"
     | "View"
     | "RegisterItem"
-    | "ManPower"
     | "CapitalExpenditure"
     | "ManPowerPlan"
     | "viewExpenseByDistrict"
-    | "viewExpenditureByDistrict";
+    | "viewDetail"
+    |"DetailApprove"
+    |"NewBranchManPowerPlan"
+    | "ViewManPowerByBranch"
+    | "ViewDistrictSum"
+    |"ApproveManPower"
+    |"FCYByBranch"
+    |"FCYByDistrict"
+    ;
 
   const tabs: Record<TabKey, string[]> = {
     "Operational Formats": ["Resource Mobilization", "Resource Allocation"],
     "Income & Expenses accounts formats": ["IncomeTemplates", "ExpenseTemplates"],
     "Capital Expenditure Budget formats": ["Capital Item", "Supply Item"],
-    AuthoriationMenu: [],
-    Report: [],
+    ApproveExpenditure: [],
+    ViewExpenditureByDistrict: [],
+    ViewExpenditureByBranch: [],
     View: [],
     RegisterItem: [],
-    ManPower: [],
+    ApproveManPower:[],
     CapitalExpenditure: [],
     ManPowerPlan: [],
     viewExpenseByDistrict: [],
-    viewExpenditureByDistrict: [],
+    viewDetail: [],
+    DetailApprove:[],
+    NewBranchManPowerPlan:[],
+    ViewManPowerByBranch:[],
+    FCYByBranch:[],
+    FCYByDistrict:[],
+    ViewDistrictSum:[],
   };
 
   const [activeTab, setActiveTab] = useState<TabKey | "">("");
@@ -100,59 +125,159 @@ const Dashboard = () => {
   const shouldHideTab = (tab: TabKey) => {
     if (isHr) {
       return [
-        "Income & Expenses accounts formats",
+        "NewBranchManPowerPlan",
         "Operational Formats",
-        "Capital Expenditure Budget formats",
+        "viewExpenseByDistrict",
         "View",
         "RegisterItem",
-        "CapitalExpenditure"
+        "CapitalExpenditure",
+        "DetailApprove",
+        "viewDetail",
+        "AuthoriationMenu",
+        "Report",
+        "ApproveExpenditure",
+        "ViewExpenditureByDistrict",
+        "ViewExpenditureByBranch",
+        "FCYByDistrict",
+        "FCYByBranch",
+        "ViewDistrictSum"
+        
       ].includes(tab);
     }
     
+    if (isBan) {
+      return [
+        "Operational Formats",
+        "viewExpenseByDistrict",
+        "View",
+        "RegisterItem",
+        "CapitalExpenditure",
+        "DetailApprove",
+        "viewDetail",
+        "AuthoriationMenu",
+        "Report",
+        "ApproveExpenditure",
+        "ViewExpenditureByDistrict",
+        "ViewExpenditureByBranch",
+       "ApproveManPower",
+        "ManPowerPlan",
+        "ViewManPowerByBranch",
+        "NewBranchManPowerPlan",
+        "ViewDistrictSum"
+      ].includes(tab);
+    }
+
     if (isCoo) {
       return [
-        "RegisterItem",
-        "Income & Expenses accounts formats",
         "Operational Formats",
-        "Capital Expenditure Budget formats",
+        "NewBranchManPowerPlan",
+        "CapitalExpenditure",
         "AuthoriationMenu",
         "Report",
         "View",
         "viewExpenseByDistrict",
         "ManPower",
-        "ManPowerPlan"
+        "DetailApprove",
+        "ManPowerPlan",
+        "viewDetail",
+        "ViewManPowerByBranch",
+        // "ManPowerApprove",
+       "ApproveManPower",
+       "FCYByBranch",
+       "FCYByDistrict",
+       "ViewDistrictSum"
       ].includes(tab);
     }
 
     if (isDis) {
       return [
+    
         "RegisterItem",
         "ManPower",
-        "ManPowerPlan",
-        "viewExpenseByDistrict"
+        "AuthoriationMenu",
+        "Report",
+        "View",
+        "viewExpenseByDistrict",
+        "CapitalExpenditure",
+        "ViewManPowerByBranch",
+        "ApproveExpenditure",
+        "ViewExpenditureByBranch",
+        "ViewExpenditureByDistrict",
+        "ApproveManPower",
+        "FCYByBranch",
+        "FCYByDistrict",
+       
       ].includes(tab);
     }
 
     if (isStr) {
       return [
+        "CapitalExpenditure",
+        "ManPowerPlan",
+        "viewExpenseByDistrict",
+        "NewBranchManPowerPlan",
         "Income & Expenses accounts formats",
         "Operational Formats",
         "Capital Expenditure Budget formats",
         "RegisterItem",
-        "ManPower"
+        "DetailApprove",
+        "ManPower",
+        "viewDetail",
+        "ViewManPowerByBranch",
+        // "ManPowerApprove",
+        "ApproveExpenditure",
+        "ViewExpenditureByDistrict",
+        "ViewExpenditureByBranch",
+        "ApproveManPower",
+        "FCYByBranch",
+        "FCYByDistrict",
+        "View",
+        
       ].includes(tab);
     }
-
+    if (isBus) {
+      return [
+        "NewBranchManPowerPlan",
+        "Income & Expenses accounts formats",
+        "Operational Formats",
+        "Capital Expenditure Budget formats",
+        "RegisterItem",
+        "DetailApprove",
+        "ManPower",
+        "viewDetail",
+        "ViewManPowerByBranch",
+        // "ManPowerApprove",
+        "ApproveExpenditure",
+        "ViewExpenditureByDistrict",
+        "ViewExpenditureByBranch",
+        "ApproveManPower",
+        "FCYByBranch",
+        "FCYByDistrict",
+        
+      ].includes(tab);
+    }
+    
     // Final check for all roles to hide specific tabs
     if (!(isDis || isHr || isCoo || isStr || isDig || isBan || isBus)) {
       return [
+        "NewBranchManPowerPlan",
         "viewExpenseByDistrict",
         "RegisterItem",
         "ManPower",
         "AuthoriationMenu",
         "Report",
         "CapitalExpenditure",
-        "ManPowerPlan"
+        "DetailApprove",
+        "View",
+        "ViewManPowerByBranch",
+        // "ManPowerApprove",
+        "ApproveExpenditure",
+        "ViewExpenditureByBranch",
+        "ViewExpenditureByDistrict",
+        "ApproveManPower",
+        "FCYByBranch",
+        "FCYByDistrict",
+         "ViewDistrictSum"
       ].includes(tab);
     }
     return false; // Show the tab
@@ -177,33 +302,43 @@ const Dashboard = () => {
           default:
             return <div className="text-black"></div>;
         }
-      case "Capital Expenditure Budget formats":
-        switch (activeSubTab) {
-          case "Capital Item":
-            return <CapitalItem />;
-          case "Supply Item":
-            return <SuplyItem />;
-          default:
-            return <div className="text-black"></div>;
-        }
-      case "AuthoriationMenu":
-        return <Report />;
-      case "Report":
-        return <TabGrid />;
+     case "Capital Expenditure Budget formats":
+      switch (activeSubTab) {
+        case "Capital Item":
+          return <CapitalItem />;
+        case "Supply Item":
+          return <SuplyItem />;
+        default:
+          return <div className="text-black"></div>;
+      }
+      case "ApproveExpenditure":
+        return <AppExpenditureByDiGrid/>;
+      case "ViewExpenditureByDistrict":
+        return <ExpenditureByDiGrid/>;
+        case "ViewExpenditureByBranch":
+          return <CapByBrGrid/>;
       case "View":
         return <EditableGrid />;
       case "RegisterItem":
         return <UnitPrice />;
-      case "ManPower":
-        return <ManPower />;
-      case "CapitalExpenditure":
-        return <CapGrid />;
+       case "DetailApprove":
+        return <DisapGrid />;
+       case "ApproveManPower":
+      return <Manapp />;
       case "ManPowerPlan":
-        return <ManGrid />;
-      case "viewExpenseByDistrict":
-        return <ExpenseByDiGrid />;
-      case "viewExpenditureByDistrict":
-        return <ExpenditureByDiGrid />;
+        return <ManPower/>;
+      case "viewDetail":
+        return <DisVGrid/>;
+      case  "NewBranchManPowerPlan":
+        return <NewManPower />;
+        case  "ViewManPowerByBranch":
+        return <ManDisGrid />;
+        case  "FCYByBranch":
+          return <FcyByBrGrid />;
+          case  "FCYByDistrict":
+            return <FcyBydisGrid />;
+            case  "ViewDistrictSum":
+              return <DisumnGrid />;
       default:
         return <div className="text-[#025AA2] font-bold">WELCOME</div>;
     }
@@ -298,4 +433,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default withAuth( Dashboard );

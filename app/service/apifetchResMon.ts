@@ -4,8 +4,6 @@ export interface ReportFormData {
     id: string;
     estimated: string;
     actual: string;
-    netincrement: string;
-    projected: string;
     branch_code: string;
     district_code: string;
     parentcode: string; 
@@ -25,17 +23,37 @@ export interface ReportFormData {
     jun: string;
 }
 
+// Define the interface for each row in the API response
+export interface ApiResponseRow {
+    branch_code: string;
+    parentcode: string;
+    estimated: string;
+    actual: string;
+    status: string;
+    description: string;
+    jul: string;
+    aug: string;
+    sep: string;
+    oct: string;
+    nov: string;
+    dec: string;
+    jan: string;
+    feb: string;
+    mar: string;
+    apr: string;
+    may: string;
+    jun: string;
+}
+
 // Updated function to include status
 export const fetchDataBackend = async (
     branchCode: string,
     districtCode: string,
-  
 ): Promise<ReportFormData[]> => {
     try {
         const payload = {
             branch_code: branchCode,
             district_code: districtCode.split(','),
-         
         };
         console.log("Payload being sent to backend:", JSON.stringify(payload, null, 2));
 
@@ -43,13 +61,12 @@ export const fetchDataBackend = async (
         console.log("Original API Response:", response.data);
 
         if (response.data && response.data.data) { 
-            const rowsWithId = response.data.data.map((row: any, index: number) => {
+            const rowsWithId = response.data.data.map((row: ApiResponseRow, index: number) => {
                 const uniqueId = `${row.branch_code}-${row.parentcode}-${index}`;
                 console.log("Generated Unique ID:", uniqueId);
                 return {
                     ...row,
                     id: uniqueId,
-                    parentcode: row.parentcode
                 };
             });
             return rowsWithId as ReportFormData[];

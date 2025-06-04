@@ -1,10 +1,8 @@
 import apiServices from "../ExportApi";
 import { ReportFormData } from "./apiFetchEditData";
 
-
 export const saveData = async (data: ReportFormData) => {
     try {
-      
         const formattedData = {
             actual: data.actual, 
             estimated: data.estimated,
@@ -26,13 +24,13 @@ export const saveData = async (data: ReportFormData) => {
             branchcode: data.branch_code 
         };
 
-        
         const response = await apiServices.put(`/updateFormats`, formattedData);
         window.alert(`Data updated successfully`);
         console.log(data.id);
         return response.data;
         
     } catch (error) {
+        console.error('Error saving data:', error); // Log the error
         throw new Error('Failed to save data');
     }
 };

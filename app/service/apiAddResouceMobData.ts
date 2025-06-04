@@ -4,8 +4,6 @@ import apiServices from "../ExportApi";
 export type FormData = {
   actual: string;
   estimated: string;
-  netincrement: string;
-  projected: string;
   parent_code: string;
   Jul: string;
   Aug: string;
@@ -21,17 +19,14 @@ export type FormData = {
   Jun: string;
 };
 
-
 export type DataRow = {
   id: string; 
   source: string; 
   actualMarch: string;
   estimatedJune: string;
-  netIncrementPlan: string;
-  projectedJune: string;
   parent_code: string;
   branch_code: string;
-  district_code:string;
+  district_code: string;
   Jul: string;
   Aug: string;
   Sep: string;
@@ -48,7 +43,7 @@ export type DataRow = {
 
 const trimData = (data: FormData): FormData => {
   const trimmedData: FormData = Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [key, value.trim()])
+    Object.entries(data).map(([key, value]) => [key, value ? value.trim() : '']) // Handle null or undefined values
   ) as FormData;
   return trimmedData;
 };

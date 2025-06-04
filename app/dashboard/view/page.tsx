@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import useFetchData from "@/app/service/useFetchData"; 
+//import useFetchData from "@/app/service/useFetchData"; 
 import { fetchDataBackend, ReportFormData } from "@/app/service/apiFetchEditData"; 
 import { saveData } from "@/app/service/apiUpdateOpData"; 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
@@ -9,8 +9,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
 const EditableGrid = () => {
     const [branchCode, setBranchCode] = useState<string | null>(null);
     const [districtRight, setDistrictRight] = useState<string | null>(null);
-    const [user_Id, setuserId] = useState<string | null>(null);
-    const { data, loading, error } = useFetchData(branchCode); 
+    // const [user_Id, setuserId] = useState<string | null>(null);
+    // const { data, loading, error } = useFetchData(branchCode); 
     const [editParentCode, setEditParentCode] = useState<string | null>(null);
     const [gridData, setGridData] = useState<ReportFormData[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>("");
@@ -22,10 +22,10 @@ const EditableGrid = () => {
     useEffect(() => {
         const storedBranchCode = sessionStorage.getItem("branch_code");
         const storedDistrictRight = sessionStorage.getItem("district_code");
-        const storedUserid = sessionStorage.getItem("userId");
+       // const storedUserid = sessionStorage.getItem("userId");
         setBranchCode(storedBranchCode);
         setDistrictRight(storedDistrictRight);
-        setuserId(storedUserid); 
+       // setuserId(storedUserid); 
     }, []);
 
     useEffect(() => {
@@ -94,8 +94,8 @@ const EditableGrid = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    // if (loading) return <div>Loading...</div>;
+    // if (error) return <div>{error}</div>;
 
     return (
         <div className="p-6 bg-gray-100 overflow-hidden">

@@ -1,6 +1,6 @@
 // app/api/login/route.ts
 import { NextResponse } from 'next/server';
-import axios from 'axios';
+//import axios from 'axios';
 import AdminapiServices from '@/app/ExportAdminAPI';
 
 export async function POST(request: Request) {
@@ -28,7 +28,8 @@ export async function POST(request: Request) {
                 IsBus:apiResponse.data.IsBus,
                 IsBan:apiResponse.data.IsBan,
                 IsDig:apiResponse.data.IsDig,
-                IsStr:apiResponse.data.IsStr
+                IsStr:apiResponse.data.IsStr,
+                sessionId:apiResponse.data.sessionId,
                 },
                   
                    { status: 200 });

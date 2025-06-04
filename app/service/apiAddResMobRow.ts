@@ -5,25 +5,27 @@ import { ReportFormData } from "./apifetchResMon";
 
 export const saveData = async (data: ReportFormData) => {
   try {
+    
+   
+
       const formattedData = {
           actual: data.actual,
           estimated: data.estimated,
-          netincrement: data.netincrement,
-          projected: data.projected,
-          parent_code: data.parentcode, // Ensure this matches your API's expectations
-          jul: data.jul,
-          aug: data.aug,
-          sep: data.sep,
-          oct: data.oct,
-          nov: data.nov,
-          dec: data.dec,
-          jan: data.jan,
-          feb: data.feb,
-          mar: data.mar,
-          apr: data.apr,
-          may: data.may,
-          jun: data.jun,
-          branch_code: data.branch_code, // Ensure this matches your API's expectations
+          
+          parent_code: data.parentcode, 
+          Jul: data.jul,
+          Aug: data.aug,
+          Sep: data.sep,
+          Oct: data.oct,
+          Nov: data.nov,
+          Dec: data.dec,
+          Jan: data.jan,
+          Feb: data.feb,
+          Mar: data.mar,
+          Apr: data.apr,
+          May: data.may,
+          Jun: data.jun,
+          branch_code: data.branch_code, 
       };
       console.log("data to save before:", formattedData)
       const response = await apiServices.post(`/save`, formattedData);

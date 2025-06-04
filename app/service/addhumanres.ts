@@ -4,7 +4,7 @@ import apiServices from "../ExportApi";
 export type FormSubmissionData = {
     existingStaff: string;
     additionalStaff: string;
-     // Ensure compatibility
+    JobPosId:string;
     jul: string;  
     aug: string;
     sep: string;
@@ -47,9 +47,9 @@ export type DataRow = {
 const trimData = (data: FormSubmissionData): FormSubmissionData => {
     return {
         ...data,
-        existingStaff: data.existingStaff, // No trimming needed for numbers
-        additionalStaff: data.additionalStaff, // No trimming needed for numbers
-         // Trim string
+        existingStaff: data.existingStaff, 
+        additionalStaff: data.additionalStaff, 
+        JobPosId:data.JobPosId,
         jul: data.jul,
         aug: data.aug,
         sep: data.sep,
